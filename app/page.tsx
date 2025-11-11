@@ -1,12 +1,13 @@
 import { Navbar } from './components/Navbar';
+import { Sidebar } from './components/Sidebar';
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-base-100">
-      <Navbar />
-      
-      <main className="container mx-auto px-4 py-12">
-        {/* Hero Section */}
+    <div className="drawer drawer-open">
+      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+      <div className="drawer-content flex flex-col">
+        <Navbar /> 
+        <main className="container mx-auto px-4 py-12">
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">
             Bem-vindo ao <span className="text-primary">daisyUI</span> Next.js
@@ -19,7 +20,6 @@ export default function Home() {
           </a>
         </div>
 
-        {/* Feature Grid */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
           <div className="card bg-base-200 shadow-lg">
             <div className="card-body">
@@ -49,11 +49,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Components Demo */}
         <div className="mb-16">
           <h2 className="text-3xl font-bold mb-8">Componentes daisyUI</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Buttons */}
             <div className="card bg-base-200">
               <div className="card-body">
                 <h3 className="card-title">Botões</h3>
@@ -66,7 +64,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Badges */}
             <div className="card bg-base-200">
               <div className="card-body">
                 <h3 className="card-title">Badges</h3>
@@ -81,7 +78,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Progress */}
             <div className="card bg-base-200">
               <div className="card-body">
                 <h3 className="card-title">Progress Bars</h3>
@@ -91,7 +87,6 @@ export default function Home() {
               </div>
             </div>
 
-            {/* Stats */}
             <div className="card bg-base-200">
               <div className="card-body">
                 <h3 className="card-title">Stats</h3>
@@ -110,7 +105,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Call to Action */}
         <div className="card bg-gradient-to-r from-primary to-secondary text-primary-content">
           <div className="card-body items-center text-center">
             <h2 className="card-title text-2xl">Personalize o Sistema</h2>
@@ -124,7 +118,10 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </main>
+        </main>
+      </div>
+      <Sidebar />
     </div>
   );
 }
+
