@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Text } from './UI';
-import { Home, Settings, BookOpen, Github } from 'lucide-react';
+import { Home, Settings, BookOpen, Github, Trello } from 'lucide-react';
 
 export function Sidebar() {
   const pathname = usePathname();
@@ -27,6 +27,12 @@ export function Sidebar() {
           <Link href="/settings" className={isActive('/settings') ? 'active' : ''}>
             <Settings size={20} />
             <Text variant="label" weight="semibold">Configurações</Text>
+          </Link>
+        </li>
+        <li>
+          <Link href="/pipelines" className={isActive('/pipelines') ? 'active' : ''}>
+            <Trello size={20} />
+            <Text variant="label" weight="semibold">Esteiras</Text>
           </Link>
         </li>
         
