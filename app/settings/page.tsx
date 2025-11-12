@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { SettingsSidebar } from '@/app/components/SettingsSidebar';
 import { DashboardSettings } from '@/app/components/settings/DashboardSettings';
+import { DashboardConfigSettings } from '@/app/components/settings/DashboardConfigSettings';
 import { CoreSettings } from '@/app/components/settings/CoreSettings';
 import { WatermarkSettings } from '@/app/components/settings/WatermarkSettings';
 import { ModulesSettings } from '@/app/components/settings/ModulesSettings';
@@ -15,6 +16,8 @@ export default function SettingsPage() {
     switch (activeSection) {
       case 'dashboard':
         return <DashboardSettings />;
+      case 'configurar-dashboard':
+        return <DashboardConfigSettings />;
       case 'cores':
         return <CoreSettings />;
       case 'marca-dagua':

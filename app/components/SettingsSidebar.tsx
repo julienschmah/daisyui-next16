@@ -20,6 +20,12 @@ export function SettingsSidebar({ onSectionChange }: { onSectionChange: (section
       description: 'Visão geral do sistema',
     },
     {
+      id: 'configurar-dashboard',
+      title: 'Configurar Dashboard',
+      icon: '⚙️',
+      description: 'Escolha widgets a exibir',
+    },
+    {
       id: 'cores',
       title: 'Cores',
       icon: '🎨',
