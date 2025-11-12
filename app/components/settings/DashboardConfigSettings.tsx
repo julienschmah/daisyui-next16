@@ -1,7 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { Header, Card, Button, Modal } from '@/app/components/UI';
+import { Header, Card, Button, Modal, Text, Badge, Input } from '@/app/components/UI';
+import {
+  BarChart3,
+  TrendingUp,
+  Target,
+  PieChart,
+  Users,
+  Home,
+  Calendar,
+  Zap,
+  ToggleLeft,
+  ToggleRight,
+  Info,
+} from 'lucide-react';
 import { ResponsiveBar } from '@nivo/bar';
 import { ResponsiveLine } from '@nivo/line';
 import { ResponsivePie } from '@nivo/pie';
@@ -10,13 +23,12 @@ interface Dashboard {
   id: string;
   name: string;
   description: string;
-  icon: string;
+  icon: React.ComponentType<{ size: number; className?: string }>;
   enabled: boolean;
   type: 'chart' | 'stats' | 'metric';
   color: string;
 }
 
-// Dados para os gráficos
 const salesData = [
   { mês: 'Jan', vendas: 100, meta: 120 },
   { mês: 'Fev', vendas: 150, meta: 130 },
@@ -76,7 +88,7 @@ export function DashboardConfigSettings() {
       id: 'sales-overview',
       name: 'Vendas',
       description: 'Gráfico de vendas ao longo do ano',
-      icon: '📈',
+      icon: BarChart3,
       enabled: true,
       type: 'chart',
       color: 'from-blue-500 to-cyan-500',
@@ -85,7 +97,7 @@ export function DashboardConfigSettings() {
       id: 'referral-tracking',
       name: 'Rastreamento',
       description: 'Rastreamento de referências e score',
-      icon: '🎯',
+      icon: Target,
       enabled: true,
       type: 'metric',
       color: 'from-green-500 to-emerald-500',
@@ -94,7 +106,7 @@ export function DashboardConfigSettings() {
       id: 'revenue-funnel',
       name: 'Receita',
       description: 'Funil de receita em etapas',
-      icon: '💰',
+      icon: TrendingUp,
       enabled: true,
       type: 'chart',
       color: 'from-purple-500 to-pink-500',
@@ -103,7 +115,7 @@ export function DashboardConfigSettings() {
       id: 'client-distribution',
       name: 'Distribuição',
       description: 'Distribuição de clientes por tipo',
-      icon: '👥',
+      icon: Users,
       enabled: true,
       type: 'chart',
       color: 'from-orange-500 to-red-500',
@@ -112,7 +124,7 @@ export function DashboardConfigSettings() {
       id: 'property-status',
       name: 'Status Imóveis',
       description: 'Status dos imóveis em carteira',
-      icon: '🏠',
+      icon: Home,
       enabled: false,
       type: 'metric',
       color: 'from-indigo-500 to-blue-500',
@@ -121,7 +133,7 @@ export function DashboardConfigSettings() {
       id: 'monthly-targets',
       name: 'Metas Mensais',
       description: 'Metas mensais e progresso',
-      icon: '🎪',
+      icon: Calendar,
       enabled: false,
       type: 'chart',
       color: 'from-yellow-500 to-orange-500',
@@ -242,7 +254,6 @@ export function DashboardConfigSettings() {
         icon="⚙️"
       />
 
-      {/* Grid de Dashboards Disponíveis */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {dashboards.map((dashboard) => (
           <div
@@ -256,17 +267,16 @@ export function DashboardConfigSettings() {
               dashboard.enabled ? 'border-success' : 'border-base-700'
             }`}>
               <div className="space-y-4">
-                {/* Header com checkbox */}
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="text-2xl">{dashboard.icon}</span>
+                    <dashboard.icon size={28} className="text-success" />
                     <div>
                       <h3 className="font-bold text-success">{dashboard.name}</h3>
-                      <p className="text-xs text-base-content/70">{dashboard.type}</p>
+                      <Text variant="caption" size="xs">{dashboard.type}</Text>
                     </div>
                   </div>
                   <label className="swap swap-rotate cursor-pointer">
-                    <input
+                    <Input
                       type="checkbox"
                       checked={dashboard.enabled}
                       onChange={(e) => {
@@ -275,25 +285,13 @@ export function DashboardConfigSettings() {
                       }}
                       className="hidden"
                     />
-                    <svg
-                      className="swap-off w-6 h-6 fill-base-500"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M15.4 5H8.6C4.1 5 1 8.13 1 12s3.1 7 7.6 7h6.8c4.5 0 7.6-3.13 7.6-7s-3.1-7-7.6-7Zm0 12H8.6c-3 0-5.4-2.27-5.4-5s2.4-5 5.4-5h6.8c3 0 5.4 2.27 5.4 5s-2.4 5-5.4 5Zm-3.2-8c-1.7 0-3 1.34-3 3s1.3 3 3 3 3-1.34 3-3-1.3-3-3-3Z" />
-                    </svg>
-                    <svg
-                      className="swap-on w-6 h-6 fill-success"
-                      viewBox="0 0 24 24"
-                    >
-                      <path d="M15.4 5H8.6C4.1 5 1 8.13 1 12s3.1 7 7.6 7h6.8c4.5 0 7.6-3.13 7.6-7s-3.1-7-7.6-7Zm3.2 8c0 1.66-1.3 3-3 3s-3-1.34-3-3 1.3-3 3-3 3 1.34 3 3Z" />
-                    </svg>
+                    <ToggleLeft size={24} className="swap-off text-base-500" />
+                    <ToggleRight size={24} className="swap-on text-success" />
                   </label>
                 </div>
 
-                {/* Descrição */}
-                <p className="text-sm text-base-content/70">{dashboard.description}</p>
+                <Text variant="subtitle" color="muted">{dashboard.description}</Text>
 
-                {/* Visualização do gráfico */}
                 <div className="h-40 rounded-lg bg-base-800 overflow-hidden border border-base-700">
                   {renderChart(dashboard.id) ? (
                     <div className="w-full h-full">
@@ -301,23 +299,18 @@ export function DashboardConfigSettings() {
                     </div>
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
-                      <span className="text-4xl opacity-50">{dashboard.icon}</span>
+                      <dashboard.icon size={60} className="text-base-content/50" />
                     </div>
                   )}
                 </div>
 
-                {/* Badge de status */}
                 <div className="flex justify-between items-center pt-2 border-t border-base-700">
-                  <span className="text-xs text-base-content/70">
+                  <Text variant="caption" size="xs">
                     {dashboard.enabled ? 'Ativo' : 'Inativo'}
-                  </span>
-                  <span
-                    className={`badge ${
-                      dashboard.enabled ? 'badge-success' : 'badge-ghost'
-                    }`}
-                  >
+                  </Text>
+                  <Badge variant={dashboard.enabled ? 'success' : 'ghost'}>
                     {dashboard.enabled ? '✓' : '○'}
-                  </span>
+                  </Badge>
                 </div>
               </div>
             </Card>
@@ -325,45 +318,39 @@ export function DashboardConfigSettings() {
         ))}
       </div>
 
-      {/* Resumo */}
       <Card title="Resumo" icon="📊" shadow="md">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-            <span className="font-semibold text-primary">Total:</span>
-            <span className="badge badge-primary text-lg font-bold">
+            <Text variant="label" color="primary">Total:</Text>
+            <Badge variant="primary" size="lg" className="text-lg font-bold">
               {dashboards.length}
-            </span>
+            </Badge>
           </div>
           <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-            <span className="font-semibold text-primary">Ativos:</span>
-            <span className="badge badge-success text-lg font-bold">
+            <Text variant="label" color="primary">Ativos:</Text>
+            <Badge variant="success" size="lg" className="text-lg font-bold">
               {dashboards.filter((d) => d.enabled).length}
-            </span>
+            </Badge>
           </div>
           <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-            <span className="font-semibold text-primary">Inativos:</span>
-            <span className="badge badge-info text-lg font-bold">
+            <Text variant="label" color="primary">Inativos:</Text>
+            <Badge variant="info" size="lg" className="text-lg font-bold">
               {dashboards.filter((d) => !d.enabled).length}
-            </span>
+            </Badge>
           </div>
         </div>
       </Card>
 
-      {/* Alert */}
-      <div className="alert alert-info">
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-        </svg>
-        <span>Clique no card ou use o toggle para ativar/desativar dashboards. As alterações serão aplicadas na próxima visita.</span>
+      <div className="alert ">
+        <Info size={24} className="text-info" />
+        <Text>Clique no card ou use o toggle para ativar/desativar dashboards. As alterações serão aplicadas na próxima visita.</Text>
       </div>
 
-      {/* Botões de Ação */}
       <div className="flex gap-4 justify-end">
         <Button variant="ghost">Restaurar Padrão</Button>
         <Button variant="primary">Salvar Alterações</Button>
       </div>
 
-      {/* Modal de Confirmação */}
       <Modal
         isOpen={showConfirm}
         onClose={() => setShowConfirm(false)}
@@ -372,13 +359,13 @@ export function DashboardConfigSettings() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-base-content/70">
+          <Text color="muted">
             Tem certeza que deseja{' '}
             {selectedDashboard && dashboards.find(d => d.id === selectedDashboard)?.enabled
               ? 'desativar'
               : 'ativar'}{' '}
             "{selectedDashboard && dashboards.find(d => d.id === selectedDashboard)?.name}"?
-          </p>
+          </Text>
           <div className="flex gap-3 justify-end pt-4">
             <Button variant="ghost" onClick={() => setShowConfirm(false)}>
               Cancelar

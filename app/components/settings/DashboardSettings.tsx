@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Header, Card, Button, Modal } from '@/app/components/UI';
+import { Header, Card, Button, Modal, Text, Badge } from '@/app/components/UI';
 
 export function DashboardSettings() {
   const [showDetails, setShowDetails] = useState(false);
@@ -23,16 +23,16 @@ export function DashboardSettings() {
         <Card title="Estatísticas" icon="📊" shadow="lg">
           <div className="space-y-2">
             <div className="flex justify-between">
-              <span>Temas Ativos:</span>
-              <span className="font-bold text-primary">35</span>
+              <Text>Temas Ativos:</Text>
+              <Text weight="bold" color="primary">35</Text>
             </div>
             <div className="flex justify-between">
-              <span>Módulos:</span>
-              <span className="font-bold text-primary">5</span>
+              <Text>Módulos:</Text>
+              <Text weight="bold" color="primary">5</Text>
             </div>
             <div className="flex justify-between">
-              <span>Configurações:</span>
-              <span className="font-bold text-primary">Ativas</span>
+              <Text>Configurações:</Text>
+              <Text weight="bold" color="primary">Ativas</Text>
             </div>
           </div>
         </Card>
@@ -40,26 +40,26 @@ export function DashboardSettings() {
         <Card title="Status" icon="🎯" shadow="lg">
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <span>Sistema:</span>
-              <span className="badge badge-success">Operacional</span>
+              <Text>Sistema:</Text>
+              <Badge variant="success">Operacional</Badge>
             </div>
             <div className="flex justify-between items-center">
-              <span>Tema:</span>
-              <span className="badge badge-primary">Definido</span>
+              <Text>Tema:</Text>
+              <Badge variant="primary">Definido</Badge>
             </div>
             <div className="flex justify-between items-center">
-              <span>Sincronização:</span>
-              <span className="badge badge-info">Ativa</span>
+              <Text>Sincronização:</Text>
+              <Badge variant="info">Ativa</Badge>
             </div>
           </div>
         </Card>
       </div>
 
       <Card className="bg-gradient-to-r from-primary/20 to-secondary/20">
-        <h3 className="font-bold text-lg text-primary mb-2">✨ Bem-vindo!</h3>
-        <p className="text-base-content/70">
+        <Text variant="label" weight="bold" size="lg" color="primary" className="mb-2 block">✨ Bem-vindo!</Text>
+        <Text variant="subtitle">
           Este é o painel de controle do seu sistema. Aqui você pode visualizar estatísticas gerais e acessar todas as configurações através do menu lateral.
-        </p>
+        </Text>
       </Card>
 
       <Modal
@@ -71,11 +71,11 @@ export function DashboardSettings() {
       >
         <div className="space-y-4">
           <div>
-            <h4 className="font-bold text-primary mb-2">Versão do Sistema</h4>
-            <p className="text-sm text-base-content/70">Next.js 16.0.1 com Tailwind CSS e daisyUI</p>
+            <Text variant="label" color="primary" className="mb-2 block">Versão do Sistema</Text>
+            <Text variant="subtitle" size="sm">Next.js 16.0.1 com Tailwind CSS e daisyUI</Text>
           </div>
           <div>
-            <h4 className="font-bold text-primary mb-2">Recursos Disponíveis</h4>
+            <Text variant="label" color="primary" className="mb-2 block">Recursos Disponíveis</Text>
             <ul className="text-sm text-base-content/70 list-disc list-inside space-y-1">
               <li>35 Temas integrados</li>
               <li>5 Módulos configuráveis</li>
@@ -85,8 +85,8 @@ export function DashboardSettings() {
             </ul>
           </div>
           <div>
-            <h4 className="font-bold text-primary mb-2">Armazenamento</h4>
-            <p className="text-sm text-base-content/70">Tema selecionado salvo em localStorage</p>
+            <Text variant="label" color="primary" className="mb-2 block">Armazenamento</Text>
+            <Text variant="subtitle" size="sm">Tema selecionado salvo em localStorage</Text>
           </div>
         </div>
       </Modal>

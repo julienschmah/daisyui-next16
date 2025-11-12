@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Header, Card, Button, List, Modal, type ListItem } from '@/app/components/UI';
+import { Header, Card, Button, List, Modal, type ListItem, Text, Badge } from '@/app/components/UI';
+import { Info } from 'lucide-react';
 
 interface RequiredField {
   id: string;
@@ -122,26 +123,24 @@ export function RequiredFieldsSettings() {
       ))}
 
       <div className="alert alert-info">
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-        </svg>
-        <span>Campos marcados com "Obrigatório" serão exigidos ao preencher formulários.</span>
+        <Info size={24} className="text-info" />
+        <Text color="info">Campos marcados com "Obrigatório" serão exigidos ao preencher formulários.</Text>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card title="Resumo" icon="📋" shadow="md">
           <div className="space-y-3">
             <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-              <span className="font-semibold text-primary">Campos Obrigatórios:</span>
-              <span className="badge badge-error text-lg font-bold">
+              <Text variant="label" color="primary">Campos Obrigatórios:</Text>
+              <Badge variant="error" size="lg" className="text-lg font-bold">
                 {fields.filter((f) => f.required).length}
-              </span>
+              </Badge>
             </div>
             <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-              <span className="font-semibold text-primary">Campos Opcionais:</span>
-              <span className="badge badge-info text-lg font-bold">
+              <Text variant="label" color="primary">Campos Opcionais:</Text>
+              <Badge variant="info" size="lg" className="text-lg font-bold">
                 {fields.filter((f) => !f.required).length}
-              </span>
+              </Badge>
             </div>
           </div>
         </Card>
@@ -166,9 +165,9 @@ export function RequiredFieldsSettings() {
         size="sm"
       >
         <div className="space-y-4">
-          <p className="text-base-content/70">
+          <Text color="muted">
             Tem certeza que deseja {selectedField && fields.find(f => f.id === selectedField)?.required ? 'tornar opcional' : 'tornar obrigatório'} este campo?
-          </p>
+          </Text>
           <div className="flex gap-3 justify-end pt-4">
             <Button variant="ghost" onClick={() => setShowConfirm(false)}>
               Cancelar

@@ -1,7 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { Header, Card, Button } from '@/app/components/UI';
+import { Header, Card, Button, Text, Input } from '@/app/components/UI';
+import { Image as ImageIcon, CloudUpload, Info } from 'lucide-react';
 
 type WatermarkType = 'imagem' | 'texto' | 'nao-inserir';
 
@@ -9,14 +10,21 @@ export function WatermarkSettings() {
   const [watermarkType, setWatermarkType] = useState<WatermarkType>('texto');
   const [watermarkText, setWatermarkText] = useState('Minha Empresa');
   const [watermarkOpacity, setWatermarkOpacity] = useState(50);
+  const [watermarkImage, setWatermarkImage] = useState<string | null>(null);
   
   const [coverReservadosImage, setCoverReservadosImage] = useState<File | null>(null);
   const [coverEmBreveImage, setCoverEmBreveImage] = useState<File | null>(null);
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, setCover: (file: File | null) => void) => {
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>, setCover: (file: File | null) => void, callback?: (dataUrl: string) => void) => {
     const file = e.target.files?.[0];
     if (file) {
       setCover(file);
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const dataUrl = reader.result as string;
+        callback?.(dataUrl);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
@@ -31,7 +39,7 @@ export function WatermarkSettings() {
       <Card title="Marca d'água" icon="📌" shadow="xl">
         <div className="mb-6">
           <label className="label">
-            <span className="label-text font-bold text-primary">Tipo de Marca d'água</span>
+            <Text variant="label" color="primary">Tipo de Marca d'água</Text>
           </label>
           <div className="flex flex-wrap gap-4">
             {[
@@ -40,7 +48,7 @@ export function WatermarkSettings() {
               { value: 'nao-inserir' as const, label: 'Não Inserir' },
             ].map((option) => (
               <label key={option.value} className="label cursor-pointer gap-3 flex-1">
-                <input
+                <Input
                   type="radio"
                   name="watermark-type"
                   value={option.value}
@@ -48,7 +56,7 @@ export function WatermarkSettings() {
                   onChange={(e) => setWatermarkType(e.target.value as WatermarkType)}
                   className="radio radio-primary"
                 />
-                <span className="label-text font-semibold">{option.label}</span>
+                <Text variant="label" weight="semibold">{option.label}</Text>
               </label>
             ))}
           </div>
@@ -58,112 +66,118 @@ export function WatermarkSettings() {
 
         {watermarkType === 'texto' && (
           <div className="space-y-4">
-            <div className="form-control">
-              <label className="label">
-                <span className="label-text font-semibold">Texto da Marca d'água</span>
-              </label>
-              <input
-                type="text"
-                value={watermarkText}
-                onChange={(e) => setWatermarkText(e.target.value)}
-                placeholder="Digite o texto da marca d'água"
-                className="input input-bordered input-primary w-full text-primary"
-              />
-            </div>
+            <Input
+              label={<Text variant="label" color="primary">Texto da Marca d'água</Text>}
+              type="text"
+              value={watermarkText}
+              onChange={(e) => setWatermarkText(e.target.value)}
+              placeholder="Digite o texto da marca d'água"
+              variant="primary"
+              fullWidth
+            />
 
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-semibold">Transparência</span>
-                <span className="label-text-alt text-primary font-bold">{watermarkOpacity}%</span>
+                <Text variant="label">Transparência</Text>
+                <Text variant="label" color="primary" weight="bold">{watermarkOpacity}%</Text>
               </label>
-              <input
-                type="range"
-                min="0"
-                max="100"
-                value={watermarkOpacity}
-                onChange={(e) => setWatermarkOpacity(parseInt(e.target.value))}
-                className="range range-primary"
-              />
+              <div className="form-control">
+                <Input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={watermarkOpacity}
+                  onChange={(e) => setWatermarkOpacity(parseInt(e.target.value))}
+                  className="range range-primary"
+                />
+              </div>
             </div>
           </div>
         )}
 
         {watermarkType === 'imagem' && (
-          <div className="form-control">
-            <label className="label">
-              <span className="label-text font-semibold">Fazer Upload da Imagem</span>
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={(e) => handleImageUpload(e, () => {})}
-              className="file-input file-input-bordered file-input-primary w-full text-primary"
-            />
+          <div className="space-y-4">
+            <div className="hidden">
+              <Input
+                id="watermark-file-input"
+                type="file"
+                accept="image/*"
+                onChange={(e) => handleImageUpload(e, () => {}, setWatermarkImage)}
+              />
+            </div>
+            <Button
+              onClick={() => document.getElementById('watermark-file-input')?.click()}
+              variant="primary"
+              fullWidth
+            >
+              Escolher Imagem para Marca d'água
+            </Button>
           </div>
         )}
 
         <div className="mt-6 border-2 border-dashed border-primary rounded-lg p-8 bg-base-300 flex items-center justify-center min-h-72">
-          <div className="text-center">
+          <div className="text-center w-full">
             {watermarkType === 'texto' && (
-              <p
+              <Text
                 className="text-3xl font-bold text-primary transform -rotate-45"
                 style={{ opacity: watermarkOpacity / 100 }}
               >
                 {watermarkText}
-              </p>
+              </Text>
             )}
-            {watermarkType === 'imagem' && (
+            {watermarkType === 'imagem' && watermarkImage ? (
+              <img
+                src={watermarkImage}
+                alt="Marca d'água"
+                className="max-w-full max-h-64 mx-auto object-contain rounded"
+              />
+            ) : watermarkType === 'imagem' ? (
               <div className="flex flex-col items-center gap-2">
-                <svg className="w-16 h-16 text-primary/50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
-                <p className="text-primary/70">Imagem será exibida aqui</p>
+                <ImageIcon size={64} className="text-primary/50" />
+                <Text variant="subtitle" color="muted">Imagem será exibida aqui</Text>
               </div>
-            )}
+            ) : null}
             {watermarkType === 'nao-inserir' && (
-              <p className="text-primary/50 text-lg">Nenhuma marca d'água será inserida</p>
+              <Text variant="subtitle" color="muted" size="lg">Nenhuma marca d'água será inserida</Text>
             )}
           </div>
         </div>
 
-        <div className="alert alert-info mt-6">
-          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-            <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
-          </svg>
-          <span>A marca d'água será aplicada a todos os documentos e fotos gerados pelo sistema.</span>
+        <div className="alert mt-6">
+          <Info size={24} className="text-info" />
+          <Text color="info">A marca d'água será aplicada a todos os documentos e fotos gerados pelo sistema.</Text>
         </div>
       </Card>
 
       <Card title="Capas do Imóvel" icon="📸" shadow="xl">
         <div className="mb-8 pb-8 border-b border-base-300">
-          <h4 className="font-bold text-lg text-primary mb-4">Capas para "Imóveis Reservados"</h4>
-          <p className="text-sm text-base-content/70 mb-4">Formatos recomendados: PNG, JPG (máx. 5MB)</p>
+          <Text variant="label" weight="bold" size="lg" color="primary" className="mb-4 block">Capas para "Imóveis Reservados"</Text>
+          <Text variant="subtitle" color="muted" className="mb-4">Formatos recomendados: PNG, JPG (máx. 5MB)</Text>
           
           <div className="border-2 border-dashed border-primary rounded-lg p-8 bg-base-300 text-center mb-4 hover:bg-base-300/80 transition cursor-pointer">
             <div className="flex flex-col items-center gap-3">
-              <svg className="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3v-6" />
-              </svg>
-              <p className="font-semibold text-primary">Fazer Upload</p>
-              <p className="text-sm text-base-content/70">(clique ou arraste um arquivo)</p>
+              <CloudUpload size={48} className="text-primary" />
+              <Text variant="label" color="primary">Fazer Upload</Text>
+              <Text variant="subtitle" size="sm" color="muted">(clique ou arraste um arquivo)</Text>
             </div>
-            <input
+            <Input
               type="file"
               accept="image/*"
               onChange={(e) => handleImageUpload(e, setCoverReservadosImage)}
               className="hidden"
+              id="upload-reservados"
             />
           </div>
 
           {coverReservadosImage && (
             <div className="bg-base-300 p-3 rounded-lg flex items-center justify-between mb-4">
-              <p className="text-sm text-base-content">✓ {coverReservadosImage.name}</p>
-              <button
+              <Text variant="subtitle" size="sm">✓ {coverReservadosImage.name}</Text>
+              <Button
                 onClick={() => setCoverReservadosImage(null)}
                 className="btn btn-sm btn-ghost"
               >
                 ✕
-              </button>
+              </Button>
             </div>
           )}
 
@@ -174,34 +188,33 @@ export function WatermarkSettings() {
         </div>
 
         <div>
-          <h4 className="font-bold text-lg text-primary mb-4">Capas para "Fotos em Breve"</h4>
-          <p className="text-sm text-base-content/70 mb-4">Formatos recomendados: PNG, JPG (máx. 5MB)</p>
+          <Text variant="label" weight="bold" size="lg" color="primary" className="mb-4 block">Capas para "Fotos em Breve"</Text>
+          <Text variant="subtitle" color="muted" className="mb-4">Formatos recomendados: PNG, JPG (máx. 5MB)</Text>
           
           <div className="border-2 border-dashed border-primary rounded-lg p-8 bg-base-300 text-center mb-4 hover:bg-base-300/80 transition cursor-pointer">
             <div className="flex flex-col items-center gap-3">
-              <svg className="w-12 h-12 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3v-6" />
-              </svg>
-              <p className="font-semibold text-primary">Fazer Upload</p>
-              <p className="text-sm text-base-content/70">(clique ou arraste um arquivo)</p>
+              <CloudUpload size={48} className="text-primary" />
+              <Text variant="label" color="primary">Fazer Upload</Text>
+              <Text variant="subtitle" size="sm" color="muted">(clique ou arraste um arquivo)</Text>
             </div>
-            <input
+            <Input
               type="file"
               accept="image/*"
               onChange={(e) => handleImageUpload(e, setCoverEmBreveImage)}
               className="hidden"
+              id="upload-em-breve"
             />
           </div>
 
           {coverEmBreveImage && (
             <div className="bg-base-300 p-3 rounded-lg flex items-center justify-between mb-4">
-              <p className="text-sm text-base-content">✓ {coverEmBreveImage.name}</p>
-              <button
+              <Text variant="subtitle" size="sm">✓ {coverEmBreveImage.name}</Text>
+              <Button
                 onClick={() => setCoverEmBreveImage(null)}
                 className="btn btn-sm btn-ghost"
               >
                 ✕
-              </button>
+              </Button>
             </div>
           )}
 

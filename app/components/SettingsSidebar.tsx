@@ -1,6 +1,8 @@
 'use client';
 
 import { useState } from 'react';
+import { Text } from './UI';
+import { Lightbulb } from 'lucide-react';
 
 interface SettingsSection {
   id: string;
@@ -59,8 +61,10 @@ export function SettingsSidebar({ onSectionChange }: { onSectionChange: (section
   return (
     <aside className="w-80 bg-base-200 min-h-screen p-6 border-r border-base-300 overflow-y-auto hidden lg:block">
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-primary mb-2">⚙️ Configurações</h2>
-        <p className="text-sm text-base-content/70">Gerencie todas as opções do seu sistema</p>
+        <Text variant="label" size="xl" weight="bold" color="primary" className="mb-2 block">
+          ⚙️ Configurações
+        </Text>
+        <Text variant="subtitle" color="muted">Gerencie todas as opções do seu sistema</Text>
       </div>
 
       <div className="divider my-4"></div>
@@ -79,8 +83,8 @@ export function SettingsSidebar({ onSectionChange }: { onSectionChange: (section
             <div className="flex items-center gap-3">
               <span className="text-xl">{section.icon}</span>
               <div className="flex-1">
-                <p className="font-semibold">{section.title}</p>
-                <p className="text-xs opacity-70">{section.description}</p>
+                <Text variant="label" weight="semibold" size="base">{section.title}</Text>
+                <Text variant="caption" size="xs">{section.description}</Text>
               </div>
             </div>
           </button>
@@ -90,9 +94,12 @@ export function SettingsSidebar({ onSectionChange }: { onSectionChange: (section
       <div className="divider my-6"></div>
 
       <div className="bg-base-300 rounded-lg p-4">
-        <p className="text-sm text-base-content/70 leading-relaxed">
-          💡 <strong>Dica:</strong> Todas as mudanças são salvas automaticamente. Use o menu ao lado para navegar entre as configurações.
-        </p>
+        <div className="flex items-start gap-2">
+          <Lightbulb size={16} className="text-warning flex-shrink-0 mt-1" />
+          <Text variant="caption" color="muted">
+            <span className="font-semibold">Dica:</span> Todas as mudanças são salvas automaticamente. Use o menu ao lado para navegar entre as configurações.
+          </Text>
+        </div>
       </div>
     </aside>
   );

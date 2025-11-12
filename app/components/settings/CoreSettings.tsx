@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Header, Card, Modal } from '@/app/components/UI';
+import { Header, Card, Modal, Text, Button } from '@/app/components/UI';
 import { ThemeSelector } from '@/app/components/ThemeSelector';
 
 export function CoreSettings() {
@@ -14,20 +14,20 @@ export function CoreSettings() {
         subtitle="Escolha o tema que define as cores de todo o sistema"
         icon="🎨"
         action={
-          <button
+          <Button
             onClick={() => setShowThemeInfo(true)}
             className="btn btn-sm btn-ghost"
           >
             ℹ️ Ajuda
-          </button>
+          </Button>
         }
       />
 
       <Card title="Seleção de Tema" shadow="lg">
-        <p className="text-base-content/70 mb-8">
+        <Text variant="subtitle" color="muted" className="mb-8">
           Escolha um tema para personalizar as cores e aparência de toda a sua experiência.
           Sua seleção será salva automaticamente em seu navegador.
-        </p>
+        </Text>
         
         <div className="divider"></div>
         <ThemeSelector />
@@ -35,27 +35,27 @@ export function CoreSettings() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Card title="Temas Diversos" icon="✨">
-          <p className="text-sm text-base-content/70">
+          <Text variant="subtitle" size="sm">
             Escolha entre 35 temas diferentes, desde tons claros até paletas escuras e vibrantes. Cada tema oferece uma experiência visual única.
-          </p>
+          </Text>
         </Card>
         
         <Card title="Salvo Automaticamente" icon="💾">
-          <p className="text-sm text-base-content/70">
+          <Text variant="subtitle" size="sm">
             Sua escolha de tema é salva automaticamente no armazenamento local e restaurada quando você retorna.
-          </p>
+          </Text>
         </Card>
         
         <Card title="Mudança Instantânea" icon="🎯">
-          <p className="text-sm text-base-content/70">
+          <Text variant="subtitle" size="sm">
             Altere o tema em tempo real e veja as cores se transformarem instantaneamente em toda a interface.
-          </p>
+          </Text>
         </Card>
 
         <Card title="Suporte a Dark Mode" icon="🌗">
-          <p className="text-sm text-base-content/70">
+          <Text variant="subtitle" size="sm">
             Temas claros e escuros disponíveis, com detecção automática das preferências do sistema.
-          </p>
+          </Text>
         </Card>
       </div>
 
@@ -68,28 +68,28 @@ export function CoreSettings() {
       >
         <div className="space-y-4">
           <div>
-            <h4 className="font-bold text-primary mb-2">O que é um Tema?</h4>
-            <p className="text-sm text-base-content/70">
+            <Text variant="label" color="primary" className="mb-2 block">O que é um Tema?</Text>
+            <Text variant="subtitle" size="sm">
               Um tema é um conjunto de cores e estilos que define a aparência visual de toda a aplicação.
-            </p>
+            </Text>
           </div>
           <div>
-            <h4 className="font-bold text-primary mb-2">Como Funciona?</h4>
-            <p className="text-sm text-base-content/70">
+            <Text variant="label" color="primary" className="mb-2 block">Como Funciona?</Text>
+            <Text variant="subtitle" size="sm">
               Ao selecionar um tema, todas as cores da interface mudam instantaneamente para as cores desse tema.
-            </p>
+            </Text>
           </div>
           <div>
-            <h4 className="font-bold text-primary mb-2">Persistência</h4>
-            <p className="text-sm text-base-content/70">
+            <Text variant="label" color="primary" className="mb-2 block">Persistência</Text>
+            <Text variant="subtitle" size="sm">
               Seu tema escolhido é salvo no navegador e carregado automaticamente na próxima visita.
-            </p>
+            </Text>
           </div>
           <div>
-            <h4 className="font-bold text-primary mb-2">Disponíveis</h4>
-            <p className="text-sm text-base-content/70">
+            <Text variant="label" color="primary" className="mb-2 block">Disponíveis</Text>
+            <Text variant="subtitle" size="sm">
               35 temas incríveis estão disponíveis, incluindo temas claros, escuros e temas especiais.
-            </p>
+            </Text>
           </div>
         </div>
       </Modal>
