@@ -1,7 +1,7 @@
 'use client';
 
 import { useTheme, themes } from '@/app/providers';
-import { Button, Text } from './UI';
+import { Text } from './UI';
 import { Check } from 'lucide-react';
 
 export function ThemeSelector() {
@@ -31,7 +31,7 @@ export function ThemeSelector() {
             </Text>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {categoryThemes.map((themeItem) => (
-                <Button
+                <button
                   key={themeItem.name}
                   onClick={() => changeTheme(themeItem.name)}
                   className={`relative p-4 rounded-lg border-2 transition-all ${
@@ -54,7 +54,7 @@ export function ThemeSelector() {
                       <Check size={20} className="text-primary" />
                     </div>
                   )}
-                </Button >
+                </button>
               ))}
             </div>
           </div>

@@ -16,7 +16,8 @@ export function CoreSettings() {
         action={
           <Button
             onClick={() => setShowThemeInfo(true)}
-            className="btn btn-sm btn-ghost"
+            variant="ghost"
+            size="sm"
           >
             ℹ️ Ajuda
           </Button>
