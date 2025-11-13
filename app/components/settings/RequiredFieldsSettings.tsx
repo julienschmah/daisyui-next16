@@ -1,8 +1,19 @@
 'use client';
 
 import { useState } from 'react';
-import { Header, Card, Button, List, Modal, type ListItem, Text, Badge } from '@/app/components/UI';
-import { Info } from 'lucide-react';
+import {
+  Header,
+  Card,
+  Button,
+  Modal,
+  Text,
+  Badge,
+  Select,
+  Toggle,
+  Accordion,
+  AccordionItemProps,
+  Info,
+} from '@/app/components/UI';
 
 interface RequiredField {
   id: string;
@@ -11,150 +22,270 @@ interface RequiredField {
   required: boolean;
   category: string;
   icon?: string;
+  typeFilter?: string;
+  purposeFilter?: string;
 }
 
 export function RequiredFieldsSettings() {
   const [fields, setFields] = useState<RequiredField[]>([
     {
-      id: 'nome',
-      name: 'Nome',
-      description: 'Nome completo do usuário/cliente',
+      id: 'tipo',
+      name: 'Tipo',
+      description: 'Tipo de registro',
       required: true,
-      category: 'Dados Pessoais',
-      icon: '👤',
+      category: 'Campo',
+      icon: '📋',
+      typeFilter: 'todos',
+      purposeFilter: 'todos',
     },
     {
-      id: 'email',
-      name: 'Email',
-      description: 'Endereço de email',
+      id: 'categoria',
+      name: 'Categoria',
+      description: 'Categoria principal',
       required: true,
-      category: 'Dados Pessoais',
-      icon: '📧',
+      category: 'Campo',
+      icon: '🏷️',
+      typeFilter: 'todos',
+      purposeFilter: 'todos',
     },
     {
-      id: 'telefone',
-      name: 'Telefone',
-      description: 'Número de telefone',
+      id: 'finalidade',
+      name: 'Finalidade',
+      description: 'Finalidade do registro',
+      required: true,
+      category: 'Campo',
+      icon: '🎯',
+      typeFilter: 'todos',
+      purposeFilter: 'todos',
+    },
+    {
+      id: 'referencia',
+      name: 'Referência Auxiliar',
+      description: 'Campo de referência',
       required: false,
-      category: 'Dados Pessoais',
-      icon: '📱',
+      category: 'Campo',
+      icon: '🔗',
+      typeFilter: 'todos',
+      purposeFilter: 'todos',
     },
     {
-      id: 'endereco',
-      name: 'Endereço',
-      description: 'Endereço completo',
+      id: 'estado',
+      name: 'Estado Atual',
+      description: 'Status atual do item',
       required: true,
-      category: 'Endereço',
-      icon: '🏠',
+      category: 'Campo',
+      icon: '📊',
+      typeFilter: 'todos',
+      purposeFilter: 'todos',
     },
     {
-      id: 'cpf',
-      name: 'CPF',
-      description: 'Cadastro de Pessoas Físicas',
+      id: 'preco_venda',
+      name: 'Preço Venda',
+      description: 'Preço de venda',
+      required: true,
+      category: 'Preços',
+      icon: '💰',
+      typeFilter: 'todos',
+      purposeFilter: 'todos',
+    },
+    {
+      id: 'preco_locacao',
+      name: 'Preço Locação',
+      description: 'Preço de locação',
       required: false,
-      category: 'Documentação',
+      category: 'Preços',
+      icon: '💳',
+      typeFilter: 'todos',
+      purposeFilter: 'todos',
+    },
+    {
+      id: 'valor_iptu',
+      name: 'Valor IPTU',
+      description: 'Valor do IPTU',
+      required: false,
+      category: 'Valores',
       icon: '📄',
-    },
-    {
-      id: 'empresa',
-      name: 'Empresa',
-      description: 'Nome da empresa/instituição',
-      required: false,
-      category: 'Dados Profissionais',
-      icon: '🏢',
+      typeFilter: 'todos',
+      purposeFilter: 'todos',
     },
   ]);
 
+  const [expandedFields, setExpandedFields] = useState<{ [key: string]: boolean }>({});
+  const [expandedCategories, setExpandedCategories] = useState<string[]>(['Campo']);
   const [showConfirm, setShowConfirm] = useState(false);
-  const [selectedField, setSelectedField] = useState<string | null>(null);
+  const [selectedField, setSelectedField] = useState<RequiredField | null>(null);
 
-  const toggleField = (fieldId: string) => {
-    setSelectedField(fieldId);
+  const toggleFieldExpanded = (fieldId: string) => {
+    setExpandedFields((prev) => ({
+      ...prev,
+      [fieldId]: !prev[fieldId],
+    }));
+  };
+
+  const toggleCategory = (category: string) => {
+    setExpandedCategories((prev) =>
+      prev.includes(category) ? prev.filter((c) => c !== category) : [...prev, category]
+    );
+  };
+
+  const updateField = (fieldId: string, updates: Partial<RequiredField>) => {
+    setFields(fields.map((field) => (field.id === fieldId ? { ...field, ...updates } : field)));
+  };
+
+  const toggleField = (field: RequiredField) => {
+    setSelectedField(field);
     setShowConfirm(true);
   };
 
   const confirmToggle = () => {
     if (selectedField) {
-      setFields(
-        fields.map((field) =>
-          field.id === selectedField ? { ...field, required: !field.required } : field
-        )
-      );
+      updateField(selectedField.id, { required: !selectedField.required });
     }
     setShowConfirm(false);
     setSelectedField(null);
   };
 
   const categories = Array.from(new Set(fields.map((f) => f.category)));
+  const getFieldsByCategory = (category: string) => fields.filter((f) => f.category === category);
+  const requiredCount = fields.filter((f) => f.required).length;
+  const optionalCount = fields.filter((f) => !f.required).length;
 
-  const getFieldsByCategory = (category: string) => {
-    return fields
-      .filter((f) => f.category === category)
-      .map((field) => ({
+  // Build accordion items for each category
+  const buildCategoryAccordionItems = (): AccordionItemProps[] => {
+    return categories.map((category) => {
+      const categoryFields = getFieldsByCategory(category);
+      const fieldAccordionItems: AccordionItemProps[] = categoryFields.map((field) => ({
         id: field.id,
+        title: field.name,
+        subtitle: field.description,
         icon: field.icon,
-        label: field.name,
-        description: field.description,
-        badge: field.required ? 'Obrigatório' : 'Opcional',
-        badgeColor: field.required ? 'error' : 'info',
-        action: (
-          <input
-            type="checkbox"
-            checked={field.required}
-            onChange={() => toggleField(field.id)}
-            className="checkbox checkbox-primary"
-          />
+        badge: (
+          <Badge variant={field.required ? 'error' : 'info'} className="text-xs font-medium">
+            {field.required ? 'Obrigatório' : 'Opcional'}
+          </Badge>
         ),
-      } as ListItem));
+        children: (
+          <div className="space-y-4">
+            <div className="flex items-center justify-between">
+              <label className="font-medium text-sm text-base-content">Obrigatório?</label>
+              <Toggle
+                checked={field.required}
+                onChange={() => toggleField(field)}
+                size="md"
+                color="primary"
+              />
+            </div>
+
+            <div className="h-px bg-base-300" />
+
+            <div className="space-y-3">
+              <label className="text-xs font-semibold text-base-content/70 uppercase tracking-wide">
+                Filtros
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-medium text-base-content/80 mb-1.5 block">
+                    Tipo
+                  </label>
+                  <Select
+                    value={field.typeFilter || 'todos'}
+                    onChange={(e) => updateField(field.id, { typeFilter: e.target.value })}
+                    options={[
+                      { value: 'todos', label: 'Todos' },
+                      { value: 'tipo1', label: 'Tipo 1' },
+                      { value: 'tipo2', label: 'Tipo 2' },
+                    ]}
+                    selectSize="sm"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-medium text-base-content/80 mb-1.5 block">
+                    Finalidade
+                  </label>
+                  <Select
+                    value={field.purposeFilter || 'todos'}
+                    onChange={(e) => updateField(field.id, { purposeFilter: e.target.value })}
+                    options={[
+                      { value: 'todos', label: 'Todos' },
+                      { value: 'finalidade1', label: 'Finalidade 1' },
+                      { value: 'finalidade2', label: 'Finalidade 2' },
+                    ]}
+                    selectSize="sm"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <Button variant="primary" fullWidth className="font-medium text-sm py-2">
+              Ver Opções
+            </Button>
+          </div>
+        ),
+      }));
+
+      return {
+        id: category,
+        title: category,
+        children: <Accordion items={fieldAccordionItems} expandedIds={Object.keys(expandedFields).filter((k) => expandedFields[k] && fieldAccordionItems.some((fi) => fi.id === k))} onToggle={toggleFieldExpanded} />,
+      };
+    });
   };
 
   return (
     <div className="space-y-6">
       <Header
         title="Campos Obrigatórios"
-        subtitle="Configure quais campos são obrigatórios no sistema"
+        subtitle="Configure quais campos são obrigatórios no formulário"
         icon="✓"
       />
 
-      {categories.map((category) => (
-        <Card key={category} title={category} shadow="lg">
-          <List items={getFieldsByCategory(category)} variant="bordered" />
-        </Card>
-      ))}
+      <Accordion
+        items={buildCategoryAccordionItems()}
+        expandedIds={expandedCategories}
+        onToggle={toggleCategory}
+        allowMultiple={true}
+      />
 
-      <div className="alert alert-info">
-        <Info size={24} className="text-info" />
-        <Text color="info">Campos marcados com "Obrigatório" serão exigidos ao preencher formulários.</Text>
+      <Card className="flex gap-2 items-start">
+        <Info size={18} className="text-info flex-shrink-0 mt-0.5" />
+        <span className="text-sm text-base-content/80">
+          Campos marcados com <span className="font-bold text-error">*</span> são obrigatórios. As alterações afetam todos os formulários do sistema.
+        </span>
+      </Card>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card>
+          <div className="text-xs font-semibold text-base-content/70 uppercase tracking-wide mb-2">
+            Obrigatórios
+          </div>
+          <div className="text-3xl font-bold text-error">{requiredCount}</div>
+          <div className="text-sm text-base-content/60 mt-1">campos obrigatórios</div>
+        </Card>
+
+        <Card>
+          <div className="text-xs font-semibold text-base-content/70 uppercase tracking-wide mb-2">
+            Opcionais
+          </div>
+          <div className="text-3xl font-bold text-info">{optionalCount}</div>
+          <div className="text-sm text-base-content/60 mt-1">campos opcionais</div>
+        </Card>
+
+        <Card>
+          <div className="text-xs font-semibold text-base-content/70 uppercase tracking-wide mb-2">
+            Total
+          </div>
+          <div className="text-3xl font-bold text-base-content">{fields.length}</div>
+          <div className="text-sm text-base-content/60 mt-1">campos no total</div>
+        </Card>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <Card title="Resumo" icon="📋" shadow="md">
-          <div className="space-y-3">
-            <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-              <Text variant="label" color="primary">Campos Obrigatórios:</Text>
-              <Badge variant="error" size="lg" className="text-lg font-bold">
-                {fields.filter((f) => f.required).length}
-              </Badge>
-            </div>
-            <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-              <Text variant="label" color="primary">Campos Opcionais:</Text>
-              <Badge variant="info" size="lg" className="text-lg font-bold">
-                {fields.filter((f) => !f.required).length}
-              </Badge>
-            </div>
-          </div>
-        </Card>
-
-        <Card title="Ações" icon="💾" shadow="md">
-          <div className="space-y-3">
-            <Button variant="primary" fullWidth>
-              Salvar Alterações
-            </Button>
-            <Button variant="ghost" fullWidth>
-              Restaurar Padrão
-            </Button>
-          </div>
-        </Card>
+      <div className="flex gap-3 justify-end">
+        <Button variant="ghost" className="font-semibold">
+          Restaurar Padrão
+        </Button>
+        <Button variant="primary" className="font-semibold px-8">
+          Salvar Alterações
+        </Button>
       </div>
 
       <Modal
@@ -166,7 +297,11 @@ export function RequiredFieldsSettings() {
       >
         <div className="space-y-4">
           <Text color="muted">
-            Tem certeza que deseja {selectedField && fields.find(f => f.id === selectedField)?.required ? 'tornar opcional' : 'tornar obrigatório'} este campo?
+            Tem certeza que deseja{' '}
+            <span className="font-semibold">
+              {selectedField?.required ? 'tornar opcional' : 'tornar obrigatório'}
+            </span>{' '}
+            o campo <span className="font-bold">{selectedField?.name}</span>?
           </Text>
           <div className="flex gap-3 justify-end pt-4">
             <Button variant="ghost" onClick={() => setShowConfirm(false)}>

@@ -22,6 +22,15 @@ export type { } from './Badge';
 export { Input } from './Input';
 export type { } from './Input';
 
+export { Select } from './Select';
+export type { } from './Select';
+
+export { Toggle } from './Toggle';
+export type { } from './Toggle';
+
+export { Accordion } from './Accordion';
+export type { AccordionItemProps } from './Accordion';
+
 export {
   BarChart3,
   TrendingUp,
@@ -41,5 +50,6 @@ export {
   EyeOff,
   ToggleLeft,
   ToggleRight,
+  ChevronDown,
 } from 'lucide-react';
 export type { IconComponent } from './icons';
