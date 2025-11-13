@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { KanbanColumn } from '../../app/components/pipelines/KanbanColumn';
-import type { PipelineCard, PipelineStage } from '../../app/types/pipeline';
+import { KanbanColumn } from '../../src/components/ui/pipelines/KanbanColumn';
+import type { PipelineCard, PipelineStage } from '../../src/types/pipeline';
 
 const meta: Meta<typeof KanbanColumn> = {
   title: 'Pipelines/Kanban Column',

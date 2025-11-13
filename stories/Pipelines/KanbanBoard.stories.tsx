@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { KanbanBoard } from '../../app/components/pipelines/KanbanBoard';
-import type { Pipeline } from '../../app/types/pipeline';
+import { KanbanBoard } from '../../src/components/ui/pipelines/KanbanBoard';
+import type { Pipeline } from '../../src/types/pipeline';
 
 const meta: Meta<typeof KanbanBoard> = {
   title: 'Pipelines/Kanban Board',

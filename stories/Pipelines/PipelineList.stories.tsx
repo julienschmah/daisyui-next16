@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { PipelineList } from '../../app/components/pipelines/PipelineList';
+import { PipelineList } from '../../src/components/ui/pipelines/PipelineList';
 
 const meta: Meta<typeof PipelineList> = {
   title: 'Pipelines/Pipeline List',

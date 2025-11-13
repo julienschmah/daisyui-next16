@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { KanbanCardModal } from '../../app/components/pipelines/KanbanCardModal';
+import { KanbanCardModal } from '../../src/components/ui/pipelines/KanbanCardModal';
 
 const meta: Meta<typeof KanbanCardModal> = {
   title: 'Pipelines/Kanban Card Modal',

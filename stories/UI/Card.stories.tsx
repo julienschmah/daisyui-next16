@@ -1,7 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Card } from '../../app/components/UI/Card';
-import { Text } from '../../app/components/UI/Text';
+import { Card } from '../../src/components/ui/Card';
+import { Text } from '../../src/components/ui/Text';
 
 const meta: Meta<typeof Card> = {
   title: 'UI/Card',

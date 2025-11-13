@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { PipelineEditModal } from '../../app/components/pipelines/PipelineEditModal';
+import { PipelineEditModal } from '../../src/components/ui/pipelines/PipelineEditModal';
 
 const meta: Meta<typeof PipelineEditModal> = {
   title: 'Pipelines/Pipeline Edit Modal',

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { AutomationModal } from '../../app/components/pipelines/AutomationModal';
+import { AutomationModal } from '../../src/components/ui/pipelines/AutomationModal';
 
 const meta: Meta<typeof AutomationModal> = {
   title: 'Pipelines/Automation Modal',

@@ -1,6 +1,6 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { AddStageModal } from '../../app/components/pipelines/AddStageModal';
+import { AddStageModal } from '../../src/components/ui/pipelines/AddStageModal';
 
 const meta: Meta<typeof AddStageModal> = {
   title: 'Pipelines/Add Stage Modal',

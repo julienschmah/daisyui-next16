@@ -1,0 +1,14 @@
+/* Variáveis CSS customizadas */
+:root {
+  --primary-color: hsl(var(--p));
+  --secondary-color: hsl(var(--s));
+  --accent-color: hsl(var(--a));
+  --neutral-color: hsl(var(--n));
+  --base-100: hsl(var(--b1));
+  --base-200: hsl(var(--b2));
+  --base-300: hsl(var(--b3));
+  --success-color: hsl(var(--su));
+  --warning-color: hsl(var(--wa));
+  --error-color: hsl(var(--er));
+  --info-color: hsl(var(--in));
+}
