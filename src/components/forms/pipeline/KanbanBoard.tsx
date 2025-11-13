@@ -1,8 +1,9 @@
 'use client';
 
 import { Card, Button } from '@/components/ui';
-import { Plus, Trash2 } from 'lucide-react';
+import { Plus, Trash2, GripVertical } from 'lucide-react';
 import { useState } from 'react';
+import { CardModal } from './CardModal';
 import type { Pipeline, PipelineCard, PipelineStage } from '@/types/pipeline';
 
 interface KanbanBoardProps {
@@ -15,6 +16,9 @@ export function KanbanBoard({ pipeline, onUpdatePipeline }: KanbanBoardProps) {
   const cards = pipeline.cards || [];
   const [isAddingStage, setIsAddingStage] = useState(false);
   const [newStageName, setNewStageName] = useState('');
+  const [draggedCard, setDraggedCard] = useState<PipelineCard | null>(null);
+  const [selectedCard, setSelectedCard] = useState<PipelineCard | null>(null);
+  const [selectedCardStageId, setSelectedCardStageId] = useState<string>('');
 
   const STAGE_COLORS = [
     '#3B82F6', // Blue
@@ -60,7 +64,7 @@ export function KanbanBoard({ pipeline, onUpdatePipeline }: KanbanBoardProps) {
   };
 
   const handleDeleteStage = (stageId: string) => {
-    if (confirm('Tem certeza que deseja deletar este estágio? Os cards serão movidos.')) {
+    if (confirm('Tem certeza que deseja deletar este estágio? Os cards serão deletados.')) {
       onUpdatePipeline({
         ...pipeline,
         stages: stages.filter((s) => s.id !== stageId),
@@ -69,9 +73,61 @@ export function KanbanBoard({ pipeline, onUpdatePipeline }: KanbanBoardProps) {
     }
   };
 
+  const handleDeleteCard = (cardId: string) => {
+    onUpdatePipeline({
+      ...pipeline,
+      cards: cards.filter((c) => c.id !== cardId),
+    });
+  };
+
+  const handleSaveCard = (updatedCard: PipelineCard) => {
+    const updatedCards = cards.map((card) =>
+      card.id === updatedCard.id ? updatedCard : card
+    );
+
+    onUpdatePipeline({
+      ...pipeline,
+      cards: updatedCards,
+    });
+
+    setSelectedCard(null);
+  };
+
+  const handleOpenCardModal = (card: PipelineCard, stageId: string) => {
+    setSelectedCard(card);
+    setSelectedCardStageId(stageId);
+  };
+
+  const handleDragStart = (card: PipelineCard) => {
+    setDraggedCard(card);
+  };
+
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+  };
+
+  const handleDropOnStage = (stageId: string) => {
+    if (!draggedCard) return;
+
+    const updatedCards = cards.map((card) =>
+      card.id === draggedCard.id ? { ...card, stageId } : card
+    );
+
+    onUpdatePipeline({
+      ...pipeline,
+      cards: updatedCards,
+    });
+
+    setDraggedCard(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedCard(null);
+  };
+
   return (
     <div>
-      {/* Kanban Board */}
       <div className="flex gap-4 overflow-x-auto pb-4">
         {stages.map((stage) => {
           const stageCards = cards.filter((c) => c.stageId === stage.id);
@@ -96,40 +152,87 @@ export function KanbanBoard({ pipeline, onUpdatePipeline }: KanbanBoardProps) {
                 </Button>
               </div>
 
-              <div className="space-y-3">
+              <div
+                className="space-y-3 min-h-32 p-2 rounded border-2 border-transparent hover:border-base-300 transition-colors"
+                onDragOver={handleDragOver}
+                onDrop={() => handleDropOnStage(stage.id)}
+              >
                 {stageCards.map((card) => (
-                  <Card key={card.id} className="cursor-move hover:shadow-md transition-shadow">
-                    <h4 className="font-semibold text-base-content">{card.title}</h4>
-                    {card.description && (
-                      <p className="text-sm text-base-content/70 mt-1">{card.description}</p>
-                    )}
-                    {card.labels && card.labels.length > 0 && (
-                      <div className="flex gap-1 mt-2 flex-wrap">
-                        {card.labels.map((label) => (
-                          <span key={label} className="text-xs bg-base-200 text-base-content px-2 py-1 rounded">
-                            {label}
-                          </span>
-                        ))}
+                  <div
+                    key={card.id}
+                    draggable
+                    onDragStart={() => handleDragStart(card)}
+                    onDragEnd={handleDragEnd}
+                    onClick={() => handleOpenCardModal(card, stage.id)}
+                    className="group cursor-pointer"
+                  >
+                    <Card
+                      className={`hover:shadow-md transition-all ${
+                        draggedCard?.id === card.id ? 'opacity-50' : ''
+                      }`}
+                    >
+                      <div className="flex items-start gap-2">
+                        <GripVertical size={16} className="text-base-content/40 mt-0.5 flex-shrink-0 group-hover:text-base-content/70 transition-colors" />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="font-semibold text-base-content break-words">{card.title}</h4>
+                          {card.description && (
+                            <p className="text-sm text-base-content/70 mt-1 break-words">{card.description}</p>
+                          )}
+                          {card.labels && card.labels.length > 0 && (
+                            <div className="flex gap-1 mt-2 flex-wrap">
+                              {card.labels.map((label) => (
+                                <span key={label} className="text-xs bg-base-200 text-base-content px-2 py-1 rounded">
+                                  {label}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          <div className="flex items-center justify-between mt-2">
+                            {card.priority && (
+                              <span className={`text-xs font-medium px-2 py-0.5 rounded ${
+                                card.priority === 'urgent' ? 'bg-error/20 text-error' :
+                                card.priority === 'high' ? 'bg-warning/20 text-warning' :
+                                card.priority === 'medium' ? 'bg-info/20 text-info' :
+                                'bg-success/20 text-success'
+                              }`}>
+                                {card.priority}
+                              </span>
+                            )}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => handleDeleteCard(card.id)}
+                              className="text-error hover:bg-error/10 opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <Trash2 size={14} />
+                            </Button>
+                          </div>
+                        </div>
                       </div>
-                    )}
-                  </Card>
+                    </Card>
+                  </div>
                 ))}
 
-                <Button
-                  variant="ghost"
-                  fullWidth
-                  className="justify-start text-base-content/60 hover:text-base-content"
-                  onClick={() => handleAddCard(stage.id)}
-                >
-                  <Plus size={16} className="mr-2" />
-                  Adicionar Card
-                </Button>
+                {stageCards.length === 0 && !draggedCard && (
+                  <div className="text-center py-6 text-base-content/40">
+                    <p className="text-sm">Arraste cards aqui</p>
+                  </div>
+                )}
               </div>
+
+              <Button
+                variant="ghost"
+                fullWidth
+                className="justify-start text-base-content/60 hover:text-base-content mt-3"
+                onClick={() => handleAddCard(stage.id)}
+              >
+                <Plus size={16} className="mr-2" />
+                Adicionar Card
+              </Button>
             </div>
           );
         })}
 
-        {/* Add New Stage */}
         <div className="flex-shrink-0 w-80">
           {!isAddingStage ? (
             <Button
@@ -180,7 +283,6 @@ export function KanbanBoard({ pipeline, onUpdatePipeline }: KanbanBoardProps) {
         </div>
       </div>
 
-      {/* Automations Section */}
       <div className="mt-8 p-6 bg-base-200 rounded-lg">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-base-content">⚙️ Automatizações</h3>
@@ -224,6 +326,15 @@ export function KanbanBoard({ pipeline, onUpdatePipeline }: KanbanBoardProps) {
           </div>
         )}
       </div>
+
+      {selectedCard && (
+        <CardModal
+          card={selectedCard}
+          stageId={selectedCardStageId}
+          onSave={handleSaveCard}
+          onClose={() => setSelectedCard(null)}
+        />
+      )}
     </div>
   );
 }
