@@ -24,6 +24,7 @@
 }
 
 body {
-  background: var(--background);
+  background-color: hsl(var(--b1) / 1);
+  color: hsl(var(--bc) / 1);
   font-family: Arial, Helvetica, sans-serif;
 }

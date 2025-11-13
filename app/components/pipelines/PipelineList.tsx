@@ -35,7 +35,6 @@ export function PipelineList({ pipelines, onDelete, onEdit }: PipelineListProps)
               </div>
             </div>
 
-            {/* Estágios */}
             <div>
               <Text variant="caption" className="text-base-content/60 mb-2 block">
                 {pipeline.stages.length} Etapas
@@ -53,7 +52,6 @@ export function PipelineList({ pipelines, onDelete, onEdit }: PipelineListProps)
               </div>
             </div>
 
-            {/* Ativos Relacionados */}
             <div>
               <Text variant="caption" className="text-base-content/60 mb-2 block">
                 Ativos
@@ -67,7 +65,6 @@ export function PipelineList({ pipelines, onDelete, onEdit }: PipelineListProps)
               </div>
             </div>
 
-            {/* Labels */}
             {pipeline.labels && pipeline.labels.length > 0 && (
               <div>
                 <Text variant="caption" className="text-base-content/60 mb-2 block">
@@ -83,14 +80,12 @@ export function PipelineList({ pipelines, onDelete, onEdit }: PipelineListProps)
               </div>
             )}
 
-            {/* Cards Count */}
             <div className="pt-2 border-t border-base-300">
               <Text variant="caption" className="text-base-content/60">
                 {pipeline.cards.length} itens no pipeline
               </Text>
             </div>
 
-            {/* Actions */}
             <div className="flex gap-2 pt-2">
               <Link href={`/pipelines/${pipeline.id}`} className="flex-1">
                 <Button

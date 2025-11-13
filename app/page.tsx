@@ -1,14 +1,7 @@
-import { Navbar } from './components/Navbar';
-import { Sidebar } from './components/Sidebar';
-
 export default function Home() {
   return (
-    <div className="drawer drawer-open">
-      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col">
-        <Navbar /> 
-        <main className="container mx-auto px-4 py-12">
-        <div className="text-center mb-16">
+    <div>
+      <div className="text-center mb-16">
           <h1 className="text-5xl font-bold mb-4">
             Bem-vindo ao <span className="text-primary">daisyUI</span> Next.js
           </h1>
@@ -118,9 +111,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        </main>
-      </div>
-      <Sidebar />
     </div>
   );
 }

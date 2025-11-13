@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Modal, Button } from '@/app/components/UI';
+import { Modal, Button, Text } from '@/app/components/UI';
 import type { PipelineCard } from '@/app/types/pipeline';
 
 interface KanbanCardModalProps {
@@ -61,9 +61,10 @@ export function KanbanCardModal({
       title={title}
     >
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Título */}
         <div>
-          <label className="block text-sm font-medium mb-2">Título *</label>
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
+            Título *
+          </Text>
           <input
             type="text"
             value={formData.title}
@@ -75,9 +76,10 @@ export function KanbanCardModal({
           />
         </div>
 
-        {/* Descrição */}
         <div>
-          <label className="block text-sm font-medium mb-2">Descrição</label>
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
+            Descrição
+          </Text>
           <textarea
             value={formData.description}
             onChange={(e) =>
@@ -89,9 +91,10 @@ export function KanbanCardModal({
           />
         </div>
 
-        {/* Prioridade */}
         <div>
-          <label className="block text-sm font-medium mb-2">Prioridade</label>
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
+            Prioridade
+          </Text>
           <select
             value={formData.priority}
             onChange={(e) =>
@@ -109,11 +112,10 @@ export function KanbanCardModal({
           </select>
         </div>
 
-        {/* Labels */}
         <div>
-          <label className="block text-sm font-medium mb-2">
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
             Etiquetas (separadas por vírgula)
-          </label>
+          </Text>
           <input
             type="text"
             value={formData.labels}
@@ -125,11 +127,12 @@ export function KanbanCardModal({
           />
         </div>
 
-        {/* Actions */}
         <div className="flex gap-3 justify-between pt-4 border-t">
           <div>
             {onDelete && (
-              <button
+              <Button
+                variant="error"
+                size="sm"
                 type="button"
                 onClick={() => {
                   if (confirm('Tem certeza que deseja deletar este item?')) {
@@ -137,10 +140,9 @@ export function KanbanCardModal({
                     onClose();
                   }
                 }}
-                className="btn btn-sm btn-error"
               >
                 Deletar
-              </button>
+              </Button>
             )}
           </div>
           <div className="flex gap-2">

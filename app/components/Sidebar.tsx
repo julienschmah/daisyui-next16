@@ -35,22 +35,6 @@ export function Sidebar() {
             <Text variant="label" weight="semibold">Esteiras</Text>
           </Link>
         </li>
-        
-        <li className="menu-title mt-8">
-          <Text variant="label" weight="bold" size="sm">Navegação</Text>
-        </li>
-        <li>
-          <a href="#" className="flex items-center gap-2">
-            <BookOpen size={20} />
-            <Text variant="label" weight="semibold">Documentação</Text>
-          </a>
-        </li>
-        <li>
-          <a href="#" className="flex items-center gap-2">
-            <Github size={20} />
-            <Text variant="label" weight="semibold">GitHub</Text>
-          </a>
-        </li>
       </ul>
     </aside>
   );

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Modal, Button } from '@/app/components/UI';
+import { Modal, Button, Text } from '@/app/components/UI';
 
 interface AddStageModalProps {
   isOpen: boolean;
@@ -31,9 +31,9 @@ export function AddStageModal({ isOpen, onClose, onSubmit }: AddStageModalProps)
     <Modal isOpen={isOpen} onClose={onClose} title="Adicionar Nova Coluna">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label className="block text-sm font-medium mb-2">
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
             Nome da Coluna *
-          </label>
+          </Text>
           <input
             type="text"
             value={stageName}
@@ -45,7 +45,9 @@ export function AddStageModal({ isOpen, onClose, onSubmit }: AddStageModalProps)
         </div>
 
         <div>
-          <label className="block text-sm font-medium mb-2">Cor</label>
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
+            Cor
+          </Text>
           <div className="flex items-center gap-3">
             <input
               type="color"

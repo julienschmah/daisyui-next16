@@ -67,9 +67,8 @@ export default function PipelinesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-base-100 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        <Header
+    <div>
+      <Header
           title="Gestão de Esteiras / Pipeline"
           subtitle="Organize e gerencie seus projetos e atendimentos"
           icon="📊"
@@ -125,7 +124,6 @@ export default function PipelinesPage() {
           onSubmit={handleUpdatePipeline}
           pipeline={selectedPipeline}
         />
-      </div>
     </div>
   );
 }

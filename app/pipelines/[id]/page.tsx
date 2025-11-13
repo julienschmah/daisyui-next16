@@ -61,26 +61,26 @@ export default function PipelineViewPage({ params }: { params: Promise<{ id: str
   };
 
   return (
-    <div className="min-h-screen bg-base-100 p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-6">
-        {/* Header com botão voltar */}
-        <div className="flex items-center justify-between">
-          <Link href="/pipelines">
-            <Button variant="ghost" className="gap-2">
-              <ChevronLeft size={20} />
-              Voltar
-            </Button>
-          </Link>
-        </div>
+    <div>
+      {/* Header com botão voltar */}
+      <div className="flex items-center justify-between mb-6">
+        <Link href="/pipelines">
+          <Button variant="ghost" className="gap-2">
+            <ChevronLeft size={20} />
+            Voltar
+          </Button>
+        </Link>
+      </div>
 
-        {/* Título */}
-        <Header
-          title={pipeline.name}
-          subtitle={pipeline.description}
-          icon="📊"
-        />
+      {/* Título */}
+      <Header
+        title={pipeline.name}
+        subtitle={pipeline.description}
+        icon="📊"
+      />
 
-        {/* Kanban Board */}
+      {/* Kanban Board */}
+      <div className="mt-6">
         <KanbanBoard
           pipeline={pipeline}
           onUpdatePipeline={handleUpdatePipeline}

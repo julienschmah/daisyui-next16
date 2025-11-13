@@ -51,7 +51,6 @@ export function PipelineModal({ isOpen, onClose, onSubmit }: PipelineModalProps)
       stages: stagesWithIds,
     });
 
-    // Reset form
     setName('');
     setDescription('');
     setSelectedAssets([]);
@@ -91,11 +90,10 @@ export function PipelineModal({ isOpen, onClose, onSubmit }: PipelineModalProps)
       size="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Nome */}
         <div>
-          <label className="block text-sm font-medium mb-2">
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
             Nome da Esteira *
-          </label>
+          </Text>
           <input
             type="text"
             value={name}
@@ -105,9 +103,10 @@ export function PipelineModal({ isOpen, onClose, onSubmit }: PipelineModalProps)
           />
         </div>
 
-        {/* Descrição */}
         <div>
-          <label className="block text-sm font-medium mb-2">Descrição</label>
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
+            Descrição
+          </Text>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -117,11 +116,10 @@ export function PipelineModal({ isOpen, onClose, onSubmit }: PipelineModalProps)
           />
         </div>
 
-        {/* Ativos Relacionados */}
         <div>
-          <label className="block text-sm font-medium mb-3">
+          <Text variant="label" weight="semibold" size="sm" className="mb-3 block">
             Ativos Relacionados
-          </label>
+          </Text>
           <div className="space-y-2">
             {ASSET_OPTIONS.map((option) => (
               <label key={option.value} className="flex items-center gap-2 cursor-pointer">
@@ -131,15 +129,16 @@ export function PipelineModal({ isOpen, onClose, onSubmit }: PipelineModalProps)
                   onChange={() => toggleAsset(option.value)}
                   className="checkbox checkbox-primary"
                 />
-                <span className="text-sm">{option.label}</span>
+                <Text variant="body" size="sm">{option.label}</Text>
               </label>
             ))}
           </div>
         </div>
 
-        {/* Etapas */}
         <div>
-          <label className="block text-sm font-medium mb-3">Etapas</label>
+          <Text variant="label" weight="semibold" size="sm" className="mb-3 block">
+            Etapas
+          </Text>
           
           <div className="space-y-2 mb-4">
             {stages.map((stage, idx) => (
@@ -154,19 +153,20 @@ export function PipelineModal({ isOpen, onClose, onSubmit }: PipelineModalProps)
                   }}
                   className="w-10 h-10 rounded cursor-pointer"
                 />
-                <span className="flex-1 font-medium">{stage.name}</span>
-                <button
+                <Text variant="label" weight="semibold" className="flex-1">{stage.name}</Text>
+                <Button
                   type="button"
                   onClick={() => removeStage(idx)}
-                  className="btn btn-sm btn-ghost btn-circle"
+                  variant="ghost"
+                  size="sm"
+                  className="px-2"
                 >
                   <X size={16} />
-                </button>
+                </Button>
               </div>
             ))}
           </div>
 
-          {/* Add New Stage */}
           <div className="flex gap-2">
             <input
               type="text"
@@ -181,17 +181,17 @@ export function PipelineModal({ isOpen, onClose, onSubmit }: PipelineModalProps)
                 }
               }}
             />
-            <button
+            <Button
               type="button"
               onClick={addStage}
-              className="btn btn-sm btn-primary"
+              variant="primary"
+              size="sm"
             >
               + Adicionar
-            </button>
+            </Button>
           </div>
         </div>
 
-        {/* Actions */}
         <div className="flex gap-3 justify-end pt-6 border-t">
           <Button
             variant="ghost"

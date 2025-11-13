@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Modal, Button, Badge } from '@/app/components/UI';
+import { Modal, Button, Badge, Text } from '@/app/components/UI';
 import { X, Plus } from 'lucide-react';
 import type { PipelineAutomation, PipelineStage } from '@/app/types/pipeline';
 
@@ -113,11 +113,10 @@ export function AutomationModal({
       size="lg"
     >
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Nome */}
         <div>
-          <label className="block text-sm font-medium mb-2">
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
             Nome da Automatização *
-          </label>
+          </Text>
           <input
             type="text"
             value={name}
@@ -127,9 +126,10 @@ export function AutomationModal({
           />
         </div>
 
-        {/* Descrição */}
         <div>
-          <label className="block text-sm font-medium mb-2">Descrição</label>
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
+            Descrição
+          </Text>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -139,12 +139,13 @@ export function AutomationModal({
           />
         </div>
 
-        {/* Trigger */}
         <div className="bg-base-200 rounded-lg p-4 space-y-3">
-          <h3 className="font-semibold">Quando:</h3>
+          <Text variant="label" weight="semibold">Quando:</Text>
 
           <div>
-            <label className="block text-sm font-medium mb-2">Tipo de Gatilho</label>
+            <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
+              Tipo de Gatilho
+            </Text>
             <select
               value={triggerType}
               onChange={(e) =>
@@ -163,9 +164,9 @@ export function AutomationModal({
 
           {triggerType === 'card_moved_to' && (
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
                 Mover para qual coluna?
-              </label>
+              </Text>
               <select
                 value={triggerStageId}
                 onChange={(e) => setTriggerStageId(e.target.value)}
@@ -183,9 +184,9 @@ export function AutomationModal({
 
           {triggerType === 'time_based' && (
             <div>
-              <label className="block text-sm font-medium mb-2">
+              <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
                 Depois de quantos dias?
-              </label>
+              </Text>
               <input
                 type="number"
                 min="1"
@@ -198,11 +199,9 @@ export function AutomationModal({
           )}
         </div>
 
-        {/* Actions */}
         <div className="bg-base-200 rounded-lg p-4 space-y-3">
-          <h3 className="font-semibold">Então:</h3>
+          <Text variant="label" weight="semibold">Então:</Text>
 
-          {/* Lista de ações */}
           {actions.length > 0 && (
             <div className="space-y-2">
               {actions.map((action, idx) => (
@@ -210,24 +209,27 @@ export function AutomationModal({
                   key={action.id}
                   className="flex items-center justify-between bg-base-100 p-2 rounded border border-base-300"
                 >
-                  <span className="text-sm">{getActionLabel(action)}</span>
-                  <button
+                  <Text variant="body" size="sm">{getActionLabel(action)}</Text>
+                  <Button
                     type="button"
                     onClick={() =>
                       setActions(actions.filter((_, i) => i !== idx))
                     }
-                    className="btn btn-xs btn-ghost"
+                    variant="ghost"
+                    size="xs"
+                    className="px-1"
                   >
                     <X size={16} />
-                  </button>
+                  </Button>
                 </div>
               ))}
             </div>
           )}
 
-          {/* Adicionar ação */}
           <div className="space-y-2">
-            <label className="block text-sm font-medium">Adicionar Ação</label>
+            <Text variant="label" weight="semibold" size="sm">
+              Adicionar Ação
+            </Text>
             <div className="flex gap-2">
               <select
                 value={actionType}
@@ -261,18 +263,19 @@ export function AutomationModal({
                   className="input input-bordered input-sm flex-1"
                 />
               )}
-              <button
+              <Button
                 type="button"
                 onClick={handleAddAction}
-                className="btn btn-sm btn-primary gap-1"
+                variant="primary"
+                size="sm"
+                className="gap-1"
               >
                 <Plus size={16} />
-              </button>
+              </Button>
             </div>
           </div>
         </div>
 
-        {/* Enabled */}
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
@@ -280,10 +283,9 @@ export function AutomationModal({
             onChange={(e) => setEnabled(e.target.checked)}
             className="checkbox checkbox-primary"
           />
-          <span className="text-sm">Ativar automatização</span>
+          <Text variant="body" size="sm">Ativar automatização</Text>
         </label>
 
-        {/* Actions */}
         <div className="flex gap-3 justify-end pt-4 border-t">
           <Button variant="ghost" onClick={onClose}>
             Cancelar

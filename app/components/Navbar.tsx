@@ -28,30 +28,7 @@ export function Navbar() {
         </Link>
       </div>
       <div className="navbar-center">
-        <ul className="menu menu-horizontal px-1">
-          <li>
-            <Link href="/">
-              <Text variant="label" size="base">Home</Text>
-            </Link>
-          </li>
-          <li>
-            <Link href="/settings">
-              <Text variant="label" size="base">Configurações</Text>
-            </Link>
-          </li>
-        </ul>
-      </div>
-      <div className="navbar-end gap-2">
-        <Button
-          onClick={toggleTheme}
-          className="btn btn-ghost btn-circle"
-          title={`Tema atual: ${theme}`}
-        >
-          {theme === 'light' ? '🌙' : '☀️'}
-        </Button>
-        <Link href="/settings">
-          <Button variant="primary">Temas</Button>
-        </Link>
+       
       </div>
     </div>
   );

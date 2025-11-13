@@ -54,7 +54,6 @@ export function KanbanColumn({
       onDrop={handleDrop}
       className="flex-shrink-0 w-80 bg-base-200 rounded-lg p-4 transition-colors"
     >
-      {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <div
@@ -66,64 +65,67 @@ export function KanbanColumn({
         </div>
       </div>
 
-      {/* Cards Container */}
       <div className="space-y-3 min-h-80">
-        {cards.map((card) => (
-          <div
-            key={card.id}
-            draggable
-            onDragStart={(e) => e.dataTransfer.setData('cardId', card.id)}
-            onClick={() => onSelectCard(card)}
-            className="bg-white rounded-lg p-3 shadow cursor-move hover:shadow-md transition-shadow border-l-4"
-            style={{ borderLeftColor: priorityColors[card.priority || 'medium'] }}
-          >
-            <div className="space-y-2">
-              <p className="font-medium text-sm line-clamp-2">{card.title}</p>
-              
-              {card.description && (
-                <p className="text-xs text-base-content/70 line-clamp-2">
-                  {card.description}
-                </p>
-              )}
+        {cards.map((card) => {
+          const borderColor = priorityColors[card.priority || 'medium'];
+          return (
+            <div
+              key={card.id}
+              draggable
+              onDragStart={(e: any) => e.dataTransfer.setData('cardId', card.id)}
+              onClick={() => onSelectCard(card)}
+              className="cursor-move hover:shadow-md transition-shadow border-l-4"
+              style={{ borderLeftColor: borderColor }}
+            >
+              <Card className="bg-base-100">
+                <div className="space-y-2">
+                  <Text variant="label" size="sm" weight="semibold" className="line-clamp-2">
+                    {card.title}
+                  </Text>
+                  
+                  {card.description && (
+                    <Text variant="caption" className="line-clamp-2 text-base-content/70">
+                      {card.description}
+                    </Text>
+                  )}
 
-              {card.labels && card.labels.length > 0 && (
-                <div className="flex flex-wrap gap-1">
-                  {card.labels.map((label) => (
-                    <span
-                      key={label}
-                      className="text-xs bg-base-300 px-2 py-1 rounded"
-                    >
-                      {label}
-                    </span>
-                  ))}
+                  {card.labels && card.labels.length > 0 && (
+                    <div className="flex flex-wrap gap-1">
+                      {card.labels.map((label) => (
+                        <Badge key={label} variant="secondary" size="sm">
+                          {label}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
+
+                  {card.dueDate && (
+                    <Text variant="caption" className="text-base-content/60">
+                      📅 {new Date(card.dueDate).toLocaleDateString('pt-BR')}
+                    </Text>
+                  )}
                 </div>
-              )}
-
-              {card.dueDate && (
-                <p className="text-xs text-base-content/60">
-                  📅 {new Date(card.dueDate).toLocaleDateString('pt-BR')}
-                </p>
-              )}
+              </Card>
             </div>
-          </div>
-        ))}
+          );
+        })}
 
-        {/* Empty State */}
         {cards.length === 0 && (
           <div className="text-center py-8 text-base-content/50">
-            <p className="text-sm">Nenhum item</p>
+            <Text variant="caption">Nenhum item</Text>
           </div>
         )}
       </div>
 
-      {/* Add Button */}
-      <button
+      <Button
         onClick={onAddCard}
-        className="w-full mt-4 btn btn-sm btn-outline btn-primary gap-2"
+        variant="outline"
+        size="sm"
+        className="w-full mt-4 gap-2"
       >
         <Plus size={16} />
         Adicionar Item
-      </button>
+      </Button>
     </div>
   );
 }

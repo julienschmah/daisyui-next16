@@ -121,7 +121,6 @@ export function PipelineEditModal({
       newStages[index],
     ];
 
-    // Atualizar ordem
     newStages.forEach((stage, idx) => {
       stage.order = idx;
     });
@@ -134,11 +133,10 @@ export function PipelineEditModal({
   return (
     <Modal isOpen={isOpen} onClose={onClose} title="Editar Esteira" size="lg">
       <form onSubmit={handleSubmit} className="space-y-6">
-        {/* Nome */}
         <div>
-          <label className="block text-sm font-medium mb-2">
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
             Nome da Esteira *
-          </label>
+          </Text>
           <input
             type="text"
             value={name}
@@ -148,9 +146,10 @@ export function PipelineEditModal({
           />
         </div>
 
-        {/* Descrição */}
         <div>
-          <label className="block text-sm font-medium mb-2">Descrição</label>
+          <Text variant="label" weight="semibold" size="sm" className="mb-2 block">
+            Descrição
+          </Text>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
@@ -160,11 +159,10 @@ export function PipelineEditModal({
           />
         </div>
 
-        {/* Ativos Relacionados */}
         <div>
-          <label className="block text-sm font-medium mb-3">
+          <Text variant="label" weight="semibold" size="sm" className="mb-3 block">
             Ativos Relacionados
-          </label>
+          </Text>
           <div className="space-y-2">
             {ASSET_OPTIONS.map((option) => (
               <label
@@ -177,17 +175,16 @@ export function PipelineEditModal({
                   onChange={() => toggleAsset(option.value)}
                   className="checkbox checkbox-primary"
                 />
-                <span className="text-sm">{option.label}</span>
+                <Text variant="body" size="sm">{option.label}</Text>
               </label>
             ))}
           </div>
         </div>
 
-        {/* Etapas - Listagem */}
         <div>
-          <label className="block text-sm font-medium mb-3">
+          <Text variant="label" weight="semibold" size="sm" className="mb-3 block">
             Etapas ({stages.length})
-          </label>
+          </Text>
 
           <div className="space-y-3 mb-4 max-h-96 overflow-y-auto">
             {stages.map((stage, idx) => (
@@ -195,27 +192,27 @@ export function PipelineEditModal({
                 key={stage.id}
                 className="flex items-center gap-2 p-3 bg-base-200 rounded-lg border border-base-300"
               >
-                {/* Ordem */}
                 <div className="flex flex-col gap-1">
-                  <button
+                  <Button
                     type="button"
                     onClick={() => moveStage(stage.id, 'up')}
-                    className="btn btn-xs btn-ghost"
+                    variant="ghost"
+                    size="xs"
                     disabled={idx === 0}
                   >
                     ▲
-                  </button>
-                  <button
+                  </Button>
+                  <Button
                     type="button"
                     onClick={() => moveStage(stage.id, 'down')}
-                    className="btn btn-xs btn-ghost"
+                    variant="ghost"
+                    size="xs"
                     disabled={idx === stages.length - 1}
                   >
                     ▼
-                  </button>
+                  </Button>
                 </div>
 
-                {/* Cor */}
                 <input
                   type="color"
                   value={stage.color || '#6B7280'}
@@ -223,7 +220,6 @@ export function PipelineEditModal({
                   className="w-10 h-10 rounded cursor-pointer"
                 />
 
-                {/* Nome */}
                 <input
                   type="text"
                   value={stage.name}
@@ -232,20 +228,20 @@ export function PipelineEditModal({
                   placeholder="Nome da etapa"
                 />
 
-                {/* Delete */}
-                <button
+                <Button
                   type="button"
                   onClick={() => removeStage(stage.id)}
-                  className="btn btn-sm btn-error btn-circle"
+                  variant="error"
+                  size="sm"
+                  className="px-2"
                   disabled={stages.length === 1}
                 >
                   <Trash2 size={16} />
-                </button>
+                </Button>
               </div>
             ))}
           </div>
 
-          {/* Add New Stage */}
           <div className="flex gap-2 p-3 bg-base-200 rounded-lg">
             <input
               type="color"
@@ -266,18 +262,19 @@ export function PipelineEditModal({
                 }
               }}
             />
-            <button
+            <Button
               type="button"
               onClick={addStage}
-              className="btn btn-sm btn-primary gap-2"
+              variant="primary"
+              size="sm"
+              className="gap-2"
             >
               <Plus size={16} />
               Adicionar
-            </button>
+            </Button>
           </div>
         </div>
 
-        {/* Metadados */}
         <div className="bg-base-300 rounded-lg p-3">
           <Text variant="caption" className="text-base-content/70">
             Criado por: {pipeline.createdBy} • Criado em:{' '}
@@ -285,7 +282,6 @@ export function PipelineEditModal({
           </Text>
         </div>
 
-        {/* Actions */}
         <div className="flex gap-3 justify-end pt-6 border-t">
           <Button variant="ghost" onClick={onClose}>
             Cancelar

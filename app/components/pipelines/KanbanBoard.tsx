@@ -89,7 +89,6 @@ export function KanbanBoard({ pipeline, onUpdatePipeline }: KanbanBoardProps) {
 
   return (
     <div className="space-y-4">
-      {/* Header com botões de ação */}
       <div className="flex gap-2 flex-wrap">
         <Button
           variant="primary"
@@ -111,7 +110,6 @@ export function KanbanBoard({ pipeline, onUpdatePipeline }: KanbanBoardProps) {
         </Button>
       </div>
 
-      {/* Kanban Columns */}
       <div className="flex gap-4 overflow-x-auto pb-4">
         {stages.map((stage) => (
           <KanbanColumn
@@ -149,14 +147,12 @@ export function KanbanBoard({ pipeline, onUpdatePipeline }: KanbanBoardProps) {
         />
       )}
 
-      {/* Modal para adicionar coluna */}
       <AddStageModal
         isOpen={showAddStage}
         onClose={() => setShowAddStage(false)}
         onSubmit={handleAddStage}
       />
 
-      {/* Modal para automatizações */}
       <AutomationModal
         isOpen={showAddAutomation}
         onClose={() => setShowAddAutomation(false)}

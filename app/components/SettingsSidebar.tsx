@@ -1,8 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import { Text } from './UI';
-import { Lightbulb } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Text, Modal, Button } from './UI';
+import { Lightbulb, ChevronLeft } from 'lucide-react';
 
 interface SettingsSection {
   id: string;
@@ -11,8 +12,10 @@ interface SettingsSection {
   description: string;
 }
 
-export function SettingsSidebar({ onSectionChange }: { onSectionChange: (section: string) => void }) {
+export function SettingsSidebar({ onSectionChange, hasChanges: initialHasChanges = false }: { onSectionChange: (section: string) => void; hasChanges?: boolean }) {
   const [activeSection, setActiveSection] = useState('dashboard');
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const router = useRouter();
 
   const sections: SettingsSection[] = [
     {
@@ -58,6 +61,19 @@ export function SettingsSidebar({ onSectionChange }: { onSectionChange: (section
     onSectionChange(sectionId);
   };
 
+  const handleGoBack = () => {
+    if (initialHasChanges) {
+      setShowConfirmModal(true);
+    } else {
+      router.push('/');
+    }
+  };
+
+  const handleConfirmBack = () => {
+    setShowConfirmModal(false);
+    router.push('/');
+  };
+
   return (
     <aside className="w-80 bg-base-200 min-h-screen p-6 border-r border-base-300 overflow-y-auto hidden lg:block">
       <div className="mb-8">
@@ -101,6 +117,43 @@ export function SettingsSidebar({ onSectionChange }: { onSectionChange: (section
           </Text>
         </div>
       </div>
+
+      <div className="divider my-6"></div>
+
+      <Button
+        onClick={handleGoBack}
+        variant="ghost"
+        className="w-full justify-start gap-2"
+      >
+        <ChevronLeft size={18} />
+        Voltar para Home
+      </Button>
+
+      <Modal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        title="Mudanças não salvas"
+      >
+        <div className="space-y-4">
+          <Text variant="body">
+            Você tem alterações não salvas. Deseja sair mesmo assim?
+          </Text>
+          <div className="flex gap-3 justify-end pt-4 border-t">
+            <Button
+              variant="ghost"
+              onClick={() => setShowConfirmModal(false)}
+            >
+              Continuar editando
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleConfirmBack}
+            >
+              Sair e descartar
+            </Button>
+          </div>
+        </div>
+      </Modal>
     </aside>
   );
 }
