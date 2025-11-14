@@ -174,7 +174,7 @@ Pipelines/
 
 ## How to View
 
-1. Run Storybook: `npm run storybook`
+1. Run Storybook: `pnpm storybook`
 2. Navigate to `Pipelines/` category
 3. Select any story to see the component in action
 4. Use Storybook controls to interact with interactive stories

@@ -121,7 +121,7 @@ import { Button } from '@/components/ui';
 
 1. **Instalar dependências:**
    ```bash
-   npm install
+   pnpm install
    ```
 
 2. **Configurar variáveis de ambiente:**
@@ -129,7 +129,7 @@ import { Button } from '@/components/ui';
 
 3. **Rodar em desenvolvimento:**
    ```bash
-   npm run dev
+   pnpm dev
    ```
 
 ## 🚀 Principais Tecnologias
@@ -145,11 +145,11 @@ import { Button } from '@/components/ui';
 ## 📝 Scripts Disponíveis
 
 ```bash
-npm run dev      # Rodar em desenvolvimento
-npm run build    # Fazer build para produção
-npm run start    # Rodar build de produção
-npm run lint     # Verificar linting
-npm run type-check # Verificar tipos TypeScript
+pnpm dev         # Rodar em desenvolvimento
+pnpm build       # Fazer build para produção
+pnpm start       # Rodar build de produção
+pnpm lint        # Verificar linting
+pnpm type-check  # Verificar tipos TypeScript
 ```
 
 ---
