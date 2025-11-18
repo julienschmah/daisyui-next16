@@ -7,9 +7,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "lint": "eslint"
   },
   "dependencies": {
     "@nivo/bar": "^0.99.0",
@@ -24,15 +22,10 @@
     "node": "^25.2.0",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "react-select": "^5.10.2"
+    "react-select": "^5.10.2",
+    "recharts": "^3.4.1"
   },
   "devDependencies": {
-    "@chromatic-com/storybook": "^4.1.2",
-    "@storybook/addon-a11y": "^10.0.7",
-    "@storybook/addon-docs": "^10.0.7",
-    "@storybook/addon-vitest": "^10.0.7",
-    "@storybook/nextjs-vite": "^10.0.7",
-    "@storybook/react": "^10.0.7",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
@@ -41,9 +34,7 @@
     "@vitest/coverage-v8": "^4.0.8",
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
-    "eslint-plugin-storybook": "^10.0.7",
     "playwright": "^1.56.1",
-    "storybook": "^10.0.7",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.8"
