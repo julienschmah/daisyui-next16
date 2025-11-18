@@ -24,6 +24,9 @@ export type { } from './Input';
 
 export { Select } from './Select';
 export type { } from './Select';
+/* 
+export { MultiSelect } from './MultiSelect';
+export type { MultiSelectOption } from './MultiSelect'; */
 
 export { Toggle } from './Toggle';
 export type { } from './Toggle';

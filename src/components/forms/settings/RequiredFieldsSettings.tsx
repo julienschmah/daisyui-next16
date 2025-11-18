@@ -15,6 +15,22 @@ import {
   Info,
 } from '@/components/ui';
 
+import AnimatedMulti from '@/components/ui/AnimatedMulti';
+
+/* const typeOptions: MultiSelectOption[] = [
+  { value: 'todos', label: 'Todos' },
+  { value: 'tipo1', label: 'Tipo 1' },
+  { value: 'tipo2', label: 'Tipo 2' },
+  { value: 'tipo3', label: 'Tipo 3' },
+];
+
+const finalidadeOptions: MultiSelectOption[] = [
+  { value: 'todos', label: 'Todos' },
+  { value: 'residencial', label: 'Residencial' },
+  { value: 'comercial', label: 'Comercial' },
+  { value: 'industrial', label: 'Industrial' },
+]; */
+
 interface RequiredField {
   id: string;
   name: string;
@@ -22,8 +38,8 @@ interface RequiredField {
   required: boolean;
   category: string;
   icon?: string;
-  typeFilter?: string;
-  purposeFilter?: string;
+  typeFilter?: string[];
+  purposeFilter?: string[];
 }
 
 export function RequiredFieldsSettings() {
@@ -35,8 +51,8 @@ export function RequiredFieldsSettings() {
       required: true,
       category: 'Campo',
       icon: '📋',
-      typeFilter: 'todos',
-      purposeFilter: 'todos',
+      typeFilter: ['todos'],
+      purposeFilter: ['todos'],
     },
     {
       id: 'categoria',
@@ -45,8 +61,8 @@ export function RequiredFieldsSettings() {
       required: true,
       category: 'Campo',
       icon: '🏷️',
-      typeFilter: 'todos',
-      purposeFilter: 'todos',
+      typeFilter: ['todos'],
+      purposeFilter: ['todos'],
     },
     {
       id: 'finalidade',
@@ -55,8 +71,8 @@ export function RequiredFieldsSettings() {
       required: true,
       category: 'Campo',
       icon: '🎯',
-      typeFilter: 'todos',
-      purposeFilter: 'todos',
+      typeFilter: ['todos'],
+      purposeFilter: ['todos'],
     },
     {
       id: 'referencia',
@@ -65,8 +81,8 @@ export function RequiredFieldsSettings() {
       required: false,
       category: 'Campo',
       icon: '🔗',
-      typeFilter: 'todos',
-      purposeFilter: 'todos',
+      typeFilter: ['todos'],
+      purposeFilter: ['todos'],
     },
     {
       id: 'estado',
@@ -75,8 +91,8 @@ export function RequiredFieldsSettings() {
       required: true,
       category: 'Campo',
       icon: '📊',
-      typeFilter: 'todos',
-      purposeFilter: 'todos',
+      typeFilter: ['todos'],
+      purposeFilter: ['todos'],
     },
     {
       id: 'preco_venda',
@@ -85,8 +101,8 @@ export function RequiredFieldsSettings() {
       required: true,
       category: 'Preços',
       icon: '💰',
-      typeFilter: 'todos',
-      purposeFilter: 'todos',
+      typeFilter: ['todos'],
+      purposeFilter: ['todos'],
     },
     {
       id: 'preco_locacao',
@@ -95,8 +111,8 @@ export function RequiredFieldsSettings() {
       required: false,
       category: 'Preços',
       icon: '💳',
-      typeFilter: 'todos',
-      purposeFilter: 'todos',
+      typeFilter: ['todos'],
+      purposeFilter: ['todos'],
     },
     {
       id: 'valor_iptu',
@@ -105,8 +121,8 @@ export function RequiredFieldsSettings() {
       required: false,
       category: 'Valores',
       icon: '📄',
-      typeFilter: 'todos',
-      purposeFilter: 'todos',
+      typeFilter: ['todos'],
+      purposeFilter: ['todos'],
     },
   ]);
 
@@ -187,31 +203,20 @@ export function RequiredFieldsSettings() {
                   <label className="text-xs font-medium text-base-content/80 mb-1.5 block">
                     Tipo
                   </label>
-                  <Select
-                    value={field.typeFilter || 'todos'}
-                    onChange={(e) => updateField(field.id, { typeFilter: e.target.value })}
-                    options={[
-                      { value: 'todos', label: 'Todos' },
-                      { value: 'tipo1', label: 'Tipo 1' },
-                      { value: 'tipo2', label: 'Tipo 2' },
-                    ]}
-                    selectSize="sm"
+                  <AnimatedMulti 
+                    
+                 
                   />
                 </div>
                 <div>
                   <label className="text-xs font-medium text-base-content/80 mb-1.5 block">
                     Finalidade
                   </label>
-                  <Select
-                    value={field.purposeFilter || 'todos'}
-                    onChange={(e) => updateField(field.id, { purposeFilter: e.target.value })}
-                    options={[
-                      { value: 'todos', label: 'Todos' },
-                      { value: 'finalidade1', label: 'Finalidade 1' },
-                      { value: 'finalidade2', label: 'Finalidade 2' },
-                    ]}
-                    selectSize="sm"
+                  <AnimatedMulti 
+                   
+                 
                   />
+
                 </div>
               </div>
             </div>

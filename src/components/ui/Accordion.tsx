@@ -35,7 +35,7 @@ export function Accordion({ items, expandedIds = [], onToggle, className = '', a
         return (
           <div
             key={item.id}
-            className="bg-base-100 border border-base-300 rounded-lg overflow-hidden hover:shadow-sm transition-shadow"
+            className="bg-base-100 border border-base-300 rounded-lg  hover:shadow-sm transition-shadow"
           >
             <button
               onClick={() => handleToggle(item.id)}
