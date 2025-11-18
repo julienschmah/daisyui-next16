@@ -4,3 +4,6 @@ export { WatermarkSettings } from './WatermarkSettings';
 export { DashboardSettings } from './DashboardSettings';
 export { DashboardConfigSettings } from './DashboardConfigSettings';
 export { ModulesSettings } from './ModulesSettings';
+export { PrestadorSettingsGeneral } from './PrestadorSettingsGeneral';
+export { PrestadorSettingsDados } from './PrestadorSettingsDados';
+export { PrestadorSettingsBancarios } from './PrestadorSettingsBancarios';

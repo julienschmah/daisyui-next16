@@ -30,7 +30,7 @@ const settingsTabs = [
   { id: 'data', label: 'Dados', icon: Database },
 ];
 
-export default function SettingsPage() {
+export default function AdminSettingsPage() {
   const [activeTab, setActiveTab] = useState<SettingsTab>('theme');
 
   const renderContent = () => {
@@ -55,13 +55,12 @@ export default function SettingsPage() {
   return (
     <div className="min-h-screen pb-12">
       <Header 
-        title="Configurações" 
-        subtitle="Gerencie suas preferências e configurações de conta"
+        title="Configurações Admin" 
+        subtitle="Gerencie preferências e configurações da plataforma"
         icon="⚙️"
       />
 
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Sidebar de abas */}
         <div className="lg:col-span-1">
           <div className="bg-base-100 rounded-lg border border-base-300 overflow-hidden sticky top-4">
             <div className="p-4 border-b border-base-300">
@@ -89,7 +88,6 @@ export default function SettingsPage() {
           </div>
         </div>
 
-        {/* Conteúdo principal */}
         <div className="lg:col-span-3">
           {renderContent()}
         </div>

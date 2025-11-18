@@ -12,6 +12,7 @@ import {
   Star,
   TrendingUp,
   CheckCircle,
+  Settings as SettingsIcon,
 } from 'lucide-react';
 
 export function Sidebar() {
@@ -35,6 +36,7 @@ export function Sidebar() {
     { name: 'Pedidos', href: '/admin/pedidos', icon: ShoppingCart },
     { name: 'Pagamentos', href: '/admin/pagamentos', icon: CreditCard },
     { name: 'Avaliações', href: '/admin/avaliacoes', icon: Star },
+    { name: 'Configurações', href: '/admin/settings', icon: SettingsIcon },
   ];
 
   const prestadorMenu = [
@@ -43,6 +45,7 @@ export function Sidebar() {
     { name: 'Meus Pedidos', href: '/prestador/meus-pedidos', icon: ShoppingCart },
     { name: 'Meus Ganhos', href: '/prestador/meus-ganhos', icon: TrendingUp },
     { name: 'Minhas Avaliações', href: '/prestador/minhas-avaliacoes', icon: Star },
+    { name: 'Configurações', href: '/prestador/settings', icon: SettingsIcon },
   ];
 
   return (
