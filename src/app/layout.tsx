@@ -15,7 +15,15 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "ServiceHub - Encontre profissionais confiáveis",
-  description: "Plataforma para contratação de serviços profissionais",
+  description: "Plataforma para contratação de serviços profissionais. Encontre encanadores, eletricistas, pintores e muito mais.",
+  keywords: ["serviços", "profissionais", "contratação", "reparos", "manutenção"],
+  authors: [{ name: "ServiceHub Team" }],
+  openGraph: {
+    title: "ServiceHub - Encontre profissionais confiáveis",
+    description: "Plataforma para contratação de serviços profissionais",
+    type: "website",
+    locale: "pt_BR",
+  },
 };
 
 export default function RootLayout({

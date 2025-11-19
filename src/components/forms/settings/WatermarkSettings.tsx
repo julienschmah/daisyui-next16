@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { Header, Card, Button, Text, Input } from '@/components/ui';
+import Image from 'next/image';
 import { Image as ImageIcon, CloudUpload, Info } from 'lucide-react';
 
 type WatermarkType = 'imagem' | 'texto' | 'nao-inserir';
@@ -11,7 +12,7 @@ export function WatermarkSettings() {
   const [watermarkText, setWatermarkText] = useState('Minha Empresa');
   const [watermarkOpacity, setWatermarkOpacity] = useState(50);
   const [watermarkImage, setWatermarkImage] = useState<string | null>(null);
-  
+
   const [coverReservadosImage, setCoverReservadosImage] = useState<File | null>(null);
   const [coverEmBreveImage, setCoverEmBreveImage] = useState<File | null>(null);
 
@@ -102,7 +103,7 @@ export function WatermarkSettings() {
                 id="watermark-file-input"
                 type="file"
                 accept="image/*"
-                onChange={(e) => handleImageUpload(e, () => {}, setWatermarkImage)}
+                onChange={(e) => handleImageUpload(e, () => { }, setWatermarkImage)}
               />
             </div>
             <Button
@@ -126,11 +127,15 @@ export function WatermarkSettings() {
               </Text>
             )}
             {watermarkType === 'imagem' && watermarkImage ? (
-              <img
-                src={watermarkImage}
-                alt="Marca d'água"
-                className="max-w-full max-h-64 mx-auto object-contain rounded"
-              />
+              <div className="relative w-full h-64">
+                <Image
+                  src={watermarkImage}
+                  alt="Marca d'água"
+                  fill
+                  className="object-contain rounded"
+                  unoptimized
+                />
+              </div>
             ) : watermarkType === 'imagem' ? (
               <div className="flex flex-col items-center gap-2">
                 <ImageIcon size={64} className="text-primary/50" />
@@ -153,7 +158,7 @@ export function WatermarkSettings() {
         <div className="mb-8 pb-8 border-b border-base-300">
           <Text variant="label" weight="bold" size="lg" color="primary" className="mb-4 block">Capas para "Imóveis Reservados"</Text>
           <Text variant="subtitle" color="muted" className="mb-4">Formatos recomendados: PNG, JPG (máx. 5MB)</Text>
-          
+
           <div className="border-2 border-dashed border-primary rounded-lg p-8 bg-base-300 text-center mb-4 hover:bg-base-300/80 transition cursor-pointer">
             <div className="flex flex-col items-center gap-3">
               <CloudUpload size={48} className="text-primary" />
@@ -190,7 +195,7 @@ export function WatermarkSettings() {
         <div>
           <Text variant="label" weight="bold" size="lg" color="primary" className="mb-4 block">Capas para "Fotos em Breve"</Text>
           <Text variant="subtitle" color="muted" className="mb-4">Formatos recomendados: PNG, JPG (máx. 5MB)</Text>
-          
+
           <div className="border-2 border-dashed border-primary rounded-lg p-8 bg-base-300 text-center mb-4 hover:bg-base-300/80 transition cursor-pointer">
             <div className="flex flex-col items-center gap-3">
               <CloudUpload size={48} className="text-primary" />
