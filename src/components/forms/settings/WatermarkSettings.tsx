@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Header, Card, Button, Text, Input } from '@/components/ui';
+import { Header, Card, Button, Typography, Input } from '@/components/ui';
 import Image from 'next/image';
 import { Image as ImageIcon, CloudUpload, Info } from 'lucide-react';
 
@@ -9,7 +9,7 @@ type WatermarkType = 'imagem' | 'texto' | 'nao-inserir';
 
 export function WatermarkSettings() {
   const [watermarkType, setWatermarkType] = useState<WatermarkType>('texto');
-  const [watermarkText, setWatermarkText] = useState('Minha Empresa');
+  const [watermarkTypography, setWatermarkTypography] = useState('Minha Empresa');
   const [watermarkOpacity, setWatermarkOpacity] = useState(50);
   const [watermarkImage, setWatermarkImage] = useState<string | null>(null);
 
@@ -40,7 +40,7 @@ export function WatermarkSettings() {
       <Card title="Marca d'água" icon="📌" shadow="xl">
         <div className="mb-6">
           <label className="label">
-            <Text variant="label" color="primary">Tipo de Marca d'água</Text>
+            <Typography variant="label" color="primary">Tipo de Marca d'água</Typography>
           </label>
           <div className="flex flex-wrap gap-4">
             {[
@@ -57,7 +57,7 @@ export function WatermarkSettings() {
                   onChange={(e) => setWatermarkType(e.target.value as WatermarkType)}
                   className="radio radio-primary"
                 />
-                <Text variant="label" weight="semibold">{option.label}</Text>
+                <Typography variant="label" weight="semibold">{option.label}</Typography>
               </label>
             ))}
           </div>
@@ -68,10 +68,10 @@ export function WatermarkSettings() {
         {watermarkType === 'texto' && (
           <div className="space-y-4">
             <Input
-              label={<Text variant="label" color="primary">Texto da Marca d'água</Text>}
+              label={<Typography variant="label" color="primary">Texto da Marca d'água</Typography>}
               type="text"
-              value={watermarkText}
-              onChange={(e) => setWatermarkText(e.target.value)}
+              value={watermarkTypography}
+              onChange={(e) => setWatermarkTypography(e.target.value)}
               placeholder="Digite o texto da marca d'água"
               variant="primary"
               fullWidth
@@ -79,8 +79,8 @@ export function WatermarkSettings() {
 
             <div className="form-control">
               <label className="label">
-                <Text variant="label">Transparência</Text>
-                <Text variant="label" color="primary" weight="bold">{watermarkOpacity}%</Text>
+                <Typography variant="label">Transparência</Typography>
+                <Typography variant="label" color="primary" weight="bold">{watermarkOpacity}%</Typography>
               </label>
               <div className="form-control">
                 <Input
@@ -119,12 +119,12 @@ export function WatermarkSettings() {
         <div className="mt-6 border-2 border-dashed border-primary rounded-lg p-8 bg-base-300 flex items-center justify-center min-h-72">
           <div className="text-center w-full">
             {watermarkType === 'texto' && (
-              <Text
+              <Typography
                 className="text-3xl font-bold text-primary transform -rotate-45"
                 style={{ opacity: watermarkOpacity / 100 }}
               >
-                {watermarkText}
-              </Text>
+                {watermarkTypography}
+              </Typography>
             )}
             {watermarkType === 'imagem' && watermarkImage ? (
               <div className="relative w-full h-64">
@@ -139,31 +139,31 @@ export function WatermarkSettings() {
             ) : watermarkType === 'imagem' ? (
               <div className="flex flex-col items-center gap-2">
                 <ImageIcon size={64} className="text-primary/50" />
-                <Text variant="subtitle" color="muted">Imagem será exibida aqui</Text>
+                <Typography variant="subtitle" color="muted">Imagem será exibida aqui</Typography>
               </div>
             ) : null}
             {watermarkType === 'nao-inserir' && (
-              <Text variant="subtitle" color="muted" size="lg">Nenhuma marca d'água será inserida</Text>
+              <Typography variant="subtitle" color="muted" size="lg">Nenhuma marca d'água será inserida</Typography>
             )}
           </div>
         </div>
 
         <div className="alert mt-6">
           <Info size={24} className="text-info" />
-          <Text color="info">A marca d'água será aplicada a todos os documentos e fotos gerados pelo sistema.</Text>
+          <Typography color="info">A marca d'água será aplicada a todos os documentos e fotos gerados pelo sistema.</Typography>
         </div>
       </Card>
 
       <Card title="Capas do Imóvel" icon="📸" shadow="xl">
         <div className="mb-8 pb-8 border-b border-base-300">
-          <Text variant="label" weight="bold" size="lg" color="primary" className="mb-4 block">Capas para "Imóveis Reservados"</Text>
-          <Text variant="subtitle" color="muted" className="mb-4">Formatos recomendados: PNG, JPG (máx. 5MB)</Text>
+          <Typography variant="label" weight="bold" size="lg" color="primary" className="mb-4 block">Capas para "Imóveis Reservados"</Typography>
+          <Typography variant="subtitle" color="muted" className="mb-4">Formatos recomendados: PNG, JPG (máx. 5MB)</Typography>
 
           <div className="border-2 border-dashed border-primary rounded-lg p-8 bg-base-300 text-center mb-4 hover:bg-base-300/80 transition cursor-pointer">
             <div className="flex flex-col items-center gap-3">
               <CloudUpload size={48} className="text-primary" />
-              <Text variant="label" color="primary">Fazer Upload</Text>
-              <Text variant="subtitle" size="sm" color="muted">(clique ou arraste um arquivo)</Text>
+              <Typography variant="label" color="primary">Fazer Upload</Typography>
+              <Typography variant="subtitle" size="sm" color="muted">(clique ou arraste um arquivo)</Typography>
             </div>
             <Input
               type="file"
@@ -176,7 +176,7 @@ export function WatermarkSettings() {
 
           {coverReservadosImage && (
             <div className="bg-base-300 p-3 rounded-lg flex items-center justify-between mb-4">
-              <Text variant="subtitle" size="sm">✓ {coverReservadosImage.name}</Text>
+              <Typography variant="subtitle" size="sm">✓ {coverReservadosImage.name}</Typography>
               <Button
                 onClick={() => setCoverReservadosImage(null)}
                 className="btn btn-sm btn-ghost"
@@ -193,14 +193,14 @@ export function WatermarkSettings() {
         </div>
 
         <div>
-          <Text variant="label" weight="bold" size="lg" color="primary" className="mb-4 block">Capas para "Fotos em Breve"</Text>
-          <Text variant="subtitle" color="muted" className="mb-4">Formatos recomendados: PNG, JPG (máx. 5MB)</Text>
+          <Typography variant="label" weight="bold" size="lg" color="primary" className="mb-4 block">Capas para "Fotos em Breve"</Typography>
+          <Typography variant="subtitle" color="muted" className="mb-4">Formatos recomendados: PNG, JPG (máx. 5MB)</Typography>
 
           <div className="border-2 border-dashed border-primary rounded-lg p-8 bg-base-300 text-center mb-4 hover:bg-base-300/80 transition cursor-pointer">
             <div className="flex flex-col items-center gap-3">
               <CloudUpload size={48} className="text-primary" />
-              <Text variant="label" color="primary">Fazer Upload</Text>
-              <Text variant="subtitle" size="sm" color="muted">(clique ou arraste um arquivo)</Text>
+              <Typography variant="label" color="primary">Fazer Upload</Typography>
+              <Typography variant="subtitle" size="sm" color="muted">(clique ou arraste um arquivo)</Typography>
             </div>
             <Input
               type="file"
@@ -213,7 +213,7 @@ export function WatermarkSettings() {
 
           {coverEmBreveImage && (
             <div className="bg-base-300 p-3 rounded-lg flex items-center justify-between mb-4">
-              <Text variant="subtitle" size="sm">✓ {coverEmBreveImage.name}</Text>
+              <Typography variant="subtitle" size="sm">✓ {coverEmBreveImage.name}</Typography>
               <Button
                 onClick={() => setCoverEmBreveImage(null)}
                 className="btn btn-sm btn-ghost"

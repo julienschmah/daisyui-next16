@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info' | 'ghost' | 'neutral' | 'outline';
   size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
 }
@@ -20,6 +20,8 @@ export function Badge({
     error: 'badge-error',
     info: 'badge-info',
     ghost: 'badge-ghost',
+    neutral: 'badge-neutral',
+    outline: 'badge-outline',
   };
 
   const sizeClasses = {

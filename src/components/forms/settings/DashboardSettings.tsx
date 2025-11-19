@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Header, Card, Button, Modal, Text, Badge } from '@/components/ui';
+import { Header, Card, Button, Modal, Typography, Badge } from '@/components/ui';
 
 export function DashboardSettings() {
   const [showDetails, setShowDetails] = useState(false);
@@ -23,16 +23,16 @@ export function DashboardSettings() {
         <Card title="Estatísticas" icon="📊" shadow="lg">
           <div className="space-y-2">
             <div className="flex justify-between">
-              <Text>Temas Ativos:</Text>
-              <Text weight="bold" color="primary">35</Text>
+              <Typography>Temas Ativos:</Typography>
+              <Typography weight="bold" color="primary">35</Typography>
             </div>
             <div className="flex justify-between">
-              <Text>Módulos:</Text>
-              <Text weight="bold" color="primary">5</Text>
+              <Typography>Módulos:</Typography>
+              <Typography weight="bold" color="primary">5</Typography>
             </div>
             <div className="flex justify-between">
-              <Text>Configurações:</Text>
-              <Text weight="bold" color="primary">Ativas</Text>
+              <Typography>Configurações:</Typography>
+              <Typography weight="bold" color="primary">Ativas</Typography>
             </div>
           </div>
         </Card>
@@ -40,15 +40,15 @@ export function DashboardSettings() {
         <Card title="Status" icon="🎯" shadow="lg">
           <div className="space-y-2">
             <div className="flex justify-between items-center">
-              <Text>Sistema:</Text>
+              <Typography>Sistema:</Typography>
               <Badge variant="success">Operacional</Badge>
             </div>
             <div className="flex justify-between items-center">
-              <Text>Tema:</Text>
+              <Typography>Tema:</Typography>
               <Badge variant="primary">Definido</Badge>
             </div>
             <div className="flex justify-between items-center">
-              <Text>Sincronização:</Text>
+              <Typography>Sincronização:</Typography>
               <Badge variant="info">Ativa</Badge>
             </div>
           </div>
@@ -56,10 +56,10 @@ export function DashboardSettings() {
       </div>
 
       <Card className="bg-gradient-to-r from-primary/20 to-secondary/20">
-        <Text variant="label" weight="bold" size="lg" color="primary" className="mb-2 block">✨ Bem-vindo!</Text>
-        <Text variant="subtitle">
+        <Typography variant="label" weight="bold" size="lg" color="primary" className="mb-2 block">✨ Bem-vindo!</Typography>
+        <Typography variant="subtitle">
           Este é o painel de controle do seu sistema. Aqui você pode visualizar estatísticas gerais e acessar todas as configurações através do menu lateral.
-        </Text>
+        </Typography>
       </Card>
 
       <Modal
@@ -71,11 +71,11 @@ export function DashboardSettings() {
       >
         <div className="space-y-4">
           <div>
-            <Text variant="label" color="primary" className="mb-2 block">Versão do Sistema</Text>
-            <Text variant="subtitle" size="sm">Next.js 16.0.1 com Tailwind CSS e daisyUI</Text>
+            <Typography variant="label" color="primary" className="mb-2 block">Versão do Sistema</Typography>
+            <Typography variant="subtitle" size="sm">Next.js 16.0.1 com Tailwind CSS e daisyUI</Typography>
           </div>
           <div>
-            <Text variant="label" color="primary" className="mb-2 block">Recursos Disponíveis</Text>
+            <Typography variant="label" color="primary" className="mb-2 block">Recursos Disponíveis</Typography>
             <ul className="text-sm text-base-content/70 list-disc list-inside space-y-1">
               <li>35 Temas integrados</li>
               <li>5 Módulos configuráveis</li>
@@ -85,8 +85,8 @@ export function DashboardSettings() {
             </ul>
           </div>
           <div>
-            <Text variant="label" color="primary" className="mb-2 block">Armazenamento</Text>
-            <Text variant="subtitle" size="sm">Tema selecionado salvo em localStorage</Text>
+            <Typography variant="label" color="primary" className="mb-2 block">Armazenamento</Typography>
+            <Typography variant="subtitle" size="sm">Tema selecionado salvo em localStorage</Typography>
           </div>
         </div>
       </Modal>

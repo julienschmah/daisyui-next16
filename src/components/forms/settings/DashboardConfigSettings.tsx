@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Header, Card, Button, Modal, Text, Badge, Input } from '@/components/ui';
+import { Header, Card, Button, Modal, Typography, Badge, Input } from '@/components/ui';
 import {
   BarChart3,
   TrendingUp,
@@ -258,21 +258,19 @@ export function DashboardConfigSettings() {
         {dashboards.map((dashboard) => (
           <div
             key={dashboard.id}
-            className={`relative group cursor-pointer transition-all duration-300 ${
-              dashboard.enabled ? 'opacity-100' : 'opacity-60 hover:opacity-75'
-            }`}
+            className={`relative group cursor-pointer transition-all duration-300 ${dashboard.enabled ? 'opacity-100' : 'opacity-60 hover:opacity-75'
+              }`}
             onClick={() => toggleDashboard(dashboard.id)}
           >
-            <Card shadow="lg" className={`h-full border-2 bg-base-900 ${
-              dashboard.enabled ? 'border-success' : 'border-base-700'
-            }`}>
+            <Card shadow="lg" className={`h-full border-2 bg-base-900 ${dashboard.enabled ? 'border-success' : 'border-base-700'
+              }`}>
               <div className="space-y-4">
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
                     <dashboard.icon size={28} className="text-success" />
                     <div>
                       <h3 className="font-bold text-success">{dashboard.name}</h3>
-                      <Text variant="caption" size="xs">{dashboard.type}</Text>
+                      <Typography variant="caption" size="xs">{dashboard.type}</Typography>
                     </div>
                   </div>
                   <label className="swap swap-rotate cursor-pointer">
@@ -290,7 +288,7 @@ export function DashboardConfigSettings() {
                   </label>
                 </div>
 
-                <Text variant="subtitle" color="muted">{dashboard.description}</Text>
+                <Typography variant="subtitle" color="muted">{dashboard.description}</Typography>
 
                 <div className="h-40 rounded-lg bg-base-800 overflow-hidden border border-base-700">
                   {renderChart(dashboard.id) ? (
@@ -305,9 +303,9 @@ export function DashboardConfigSettings() {
                 </div>
 
                 <div className="flex justify-between items-center pt-2 border-t border-base-700">
-                  <Text variant="caption" size="xs">
+                  <Typography variant="caption" size="xs">
                     {dashboard.enabled ? 'Ativo' : 'Inativo'}
-                  </Text>
+                  </Typography>
                   <Badge variant={dashboard.enabled ? 'success' : 'ghost'}>
                     {dashboard.enabled ? '✓' : '○'}
                   </Badge>
@@ -321,19 +319,19 @@ export function DashboardConfigSettings() {
       <Card title="Resumo" icon="📊" shadow="md">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-            <Text variant="label" color="primary">Total:</Text>
+            <Typography variant="label" color="primary">Total:</Typography>
             <Badge variant="primary" size="lg" className="text-lg font-bold">
               {dashboards.length}
             </Badge>
           </div>
           <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-            <Text variant="label" color="primary">Ativos:</Text>
+            <Typography variant="label" color="primary">Ativos:</Typography>
             <Badge variant="success" size="lg" className="text-lg font-bold">
               {dashboards.filter((d) => d.enabled).length}
             </Badge>
           </div>
           <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-            <Text variant="label" color="primary">Inativos:</Text>
+            <Typography variant="label" color="primary">Inativos:</Typography>
             <Badge variant="info" size="lg" className="text-lg font-bold">
               {dashboards.filter((d) => !d.enabled).length}
             </Badge>
@@ -343,7 +341,7 @@ export function DashboardConfigSettings() {
 
       <div className="alert ">
         <Info size={24} className="text-info" />
-        <Text>Clique no card ou use o toggle para ativar/desativar dashboards. As alterações serão aplicadas na próxima visita.</Text>
+        <Typography>Clique no card ou use o toggle para ativar/desativar dashboards. As alterações serão aplicadas na próxima visita.</Typography>
       </div>
 
       <div className="flex gap-4 justify-end">
@@ -359,13 +357,13 @@ export function DashboardConfigSettings() {
         size="sm"
       >
         <div className="space-y-4">
-          <Text color="muted">
+          <Typography color="muted">
             Tem certeza que deseja{' '}
             {selectedDashboard && dashboards.find(d => d.id === selectedDashboard)?.enabled
               ? 'desativar'
               : 'ativar'}{' '}
             "{selectedDashboard && dashboards.find(d => d.id === selectedDashboard)?.name}"?
-          </Text>
+          </Typography>
           <div className="flex gap-3 justify-end pt-4">
             <Button variant="ghost" onClick={() => setShowConfirm(false)}>
               Cancelar

@@ -1,6 +1,6 @@
 'use client';
 
-import { Modal, Button, Input, Text } from '@/components/ui';
+import { Modal, Button, Input, Typography } from '@/components/ui';
 
 interface PipelineModalProps {
   isOpen: boolean;
@@ -23,7 +23,7 @@ export function PipelineModal({ isOpen, onClose, onSubmit }: PipelineModalProps)
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
           <label className="text-sm font-medium text-base-content mb-1 block">Nome</label>
-          <Input 
+          <Input
             name="name"
             placeholder="Ex: Vendas, Suporte, RH"
             required
@@ -31,7 +31,7 @@ export function PipelineModal({ isOpen, onClose, onSubmit }: PipelineModalProps)
         </div>
         <div>
           <label className="text-sm font-medium text-base-content mb-1 block">Descrição</label>
-          <Input 
+          <Input
             name="description"
             placeholder="Descrição da pipeline"
           />

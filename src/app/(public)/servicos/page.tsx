@@ -1,244 +1,177 @@
 'use client';
 
 import { useState } from 'react';
-import { Header, Button, Input } from '@/components/ui';
-import { FilterSidebar, ServiceCard } from '@/components/public';
-import { Search } from 'lucide-react';
+import { ServiceCard, ServiceListItem, Input, Button, Typography, Badge } from '@/components/ui';
+import { MOCK_SERVICES, CATEGORIES } from '@/mocks/services';
+import { Search, Filter, X, LayoutGrid, List as ListIcon } from 'lucide-react';
+import { formatCurrency } from '@/lib/helpers';
 
-// Mock data - serviços disponíveis
-const mockServices = [
-  {
-    id: 1,
-    title: 'Reparo de Torneira',
-    description: 'Conserto profissional de torneiras com garantia',
-    price: 150,
-    unit: 'serviço',
-    professional: { name: 'João Silva' },
-    rating: 4.8,
-    reviews: 124,
-    location: 'São Paulo, SP',
-    availability: 'Disponível hoje',
-    category: 'Encanamento',
-  },
-  {
-    id: 2,
-    title: 'Instalação de Luminárias',
-    description: 'Instalação segura de luminárias e spots',
-    price: 200,
-    unit: 'serviço',
-    professional: { name: 'Carlos Oliveira' },
-    rating: 4.9,
-    reviews: 89,
-    location: 'São Paulo, SP',
-    availability: 'Disponível amanhã',
-    category: 'Elétrica',
-  },
-  {
-    id: 3,
-    title: 'Limpeza Profissional',
-    description: 'Limpeza completa de ambientes residenciais',
-    price: 250,
-    unit: 'hora',
-    professional: { name: 'Maria Santos' },
-    rating: 5.0,
-    reviews: 156,
-    location: 'São Paulo, SP',
-    availability: 'Disponível hoje',
-    category: 'Limpeza',
-  },
-  {
-    id: 4,
-    title: 'Pintura de Parede',
-    description: 'Pintura profissional com materiais de qualidade',
-    price: 400,
-    unit: 'ambiente',
-    professional: { name: 'Pedro Costa' },
-    rating: 4.7,
-    reviews: 67,
-    location: 'São Paulo, SP',
-    availability: 'Disponível em 2 dias',
-    category: 'Pintura',
-  },
-  {
-    id: 5,
-    title: 'Conserto de Portão',
-    description: 'Reparo e manutenção de portões automáticos',
-    price: 180,
-    unit: 'serviço',
-    professional: { name: 'Roberto Ferreira' },
-    rating: 4.6,
-    reviews: 45,
-    location: 'São Paulo, SP',
-    availability: 'Disponível amanhã',
-    category: 'Carpintaria',
-  },
-  {
-    id: 6,
-    title: 'Ar Condicionado - Limpeza',
-    description: 'Limpeza profissional e manutenção preventiva',
-    price: 120,
-    unit: 'serviço',
-    professional: { name: 'Lucas Almeida' },
-    rating: 4.9,
-    reviews: 98,
-    location: 'São Paulo, SP',
-    availability: 'Disponível hoje',
-    category: 'HVAC',
-  },
-  {
-    id: 7,
-    title: 'Paisagismo Residencial',
-    description: 'Projeto e execução de jardins e paisagismo',
-    price: 500,
-    unit: 'projeto',
-    professional: { name: 'Ana Paula' },
-    rating: 5.0,
-    reviews: 78,
-    location: 'São Paulo, SP',
-    availability: 'Disponível em 3 dias',
-    category: 'Paisagismo',
-  },
-  {
-    id: 8,
-    title: 'Troca de Piso',
-    description: 'Remoção e instalação profissional de pisos',
-    price: 350,
-    unit: 'metro',
-    professional: { name: 'Mateus Gomes' },
-    rating: 4.8,
-    reviews: 112,
-    location: 'São Paulo, SP',
-    availability: 'Disponível em 2 dias',
-    category: 'Carpintaria',
-  },
-];
-
-export default function ServicosPage() {
+export default function ServicesPage() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredServices, setFilteredServices] = useState(mockServices);
-  const [filters, setFilters] = useState({});
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [priceRange, setPriceRange] = useState<[number, number]>([0, 1000]);
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
 
-  const handleSearch = (term: string) => {
-    setSearchTerm(term);
-    applyFilters(term, filters);
+  const filteredServices = MOCK_SERVICES.filter((service) => {
+    const matchesSearch = service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      service.description.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory ? service.category === selectedCategory : true;
+    const matchesPrice = service.price >= priceRange[0] && service.price <= priceRange[1];
+
+    return matchesSearch && matchesCategory && matchesPrice;
+  });
+
+  const clearFilters = () => {
+    setSelectedCategory(null);
+    setSearchTerm('');
+    setPriceRange([0, 1000]);
   };
 
-  const handleFilterChange = (newFilters: any) => {
-    setFilters(newFilters);
-    applyFilters(searchTerm, newFilters);
-  };
-
-  const applyFilters = (search: string, appliedFilters: any) => {
-    let filtered = mockServices;
-
-    // Filtro por busca
-    if (search) {
-      filtered = filtered.filter(
-        (s) =>
-          s.title.toLowerCase().includes(search.toLowerCase()) ||
-          s.description.toLowerCase().includes(search.toLowerCase())
-      );
-    }
-
-    // Filtro por categoria
-    if (appliedFilters.category) {
-      filtered = filtered.filter((s) =>
-        s.category.toLowerCase().includes(appliedFilters.category.toLowerCase())
-      );
-    }
-
-    // Filtro por preço
-    if (appliedFilters.minPrice) {
-      filtered = filtered.filter((s) => s.price >= parseFloat(appliedFilters.minPrice));
-    }
-    if (appliedFilters.maxPrice) {
-      filtered = filtered.filter((s) => s.price <= parseFloat(appliedFilters.maxPrice));
-    }
-
-    // Filtro por localização
-    if (appliedFilters.location) {
-      filtered = filtered.filter((s) =>
-        s.location.toLowerCase().includes(appliedFilters.location.toLowerCase())
-      );
-    }
-
-    // Filtro por avaliação
-    if (appliedFilters.rating) {
-      filtered = filtered.filter((s) => s.rating >= parseFloat(appliedFilters.rating));
-    }
-
-    setFilteredServices(filtered);
-  };
+  const hasActiveFilters = selectedCategory || searchTerm || priceRange[1] < 1000;
 
   return (
-    <div className="space-y-8">
-      {/* Hero Section */}
-      <div className="bg-gradient-to-r from-primary to-secondary rounded-lg p-12 text-white">
-        <h1 className="text-4xl font-bold mb-4">Encontre o Profissional Perfeito</h1>
-        <p className="text-lg text-white/90 mb-8">
-          Serviços confiáveis de profissionais verificados para qualquer necessidade
-        </p>
+    <div className="min-h-screen bg-base-200 py-8">
+      <div className="container mx-auto px-4">
 
-        {/* Barra de Busca Principal */}
-        <div className="flex gap-2">
-          <Input
-            placeholder="O que você precisa? (ex: encanador, eletricista...)"
-            fullWidth
-            inputSize="lg"
-            value={searchTerm}
-            onChange={(e) => handleSearch(e.target.value)}
-            icon={<Search size={20} />}
-          />
-          <Button variant="accent" size="lg">
-            Buscar
-          </Button>
-        </div>
-      </div>
-
-      {/* Conteúdo Principal */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-        {/* Sidebar de Filtros */}
-        <div className="lg:col-span-1">
-          <FilterSidebar onFilterChange={handleFilterChange} />
-        </div>
-
-        {/* Grid de Serviços */}
-        <div className="lg:col-span-3">
-          {/* Cabeçalho */}
-          <div className="mb-6">
-            <h2 className="text-2xl font-bold text-base-content">
-              Serviços Disponíveis
-            </h2>
-            <p className="text-sm text-base-content/70 mt-2">
-              {filteredServices.length} resultado{filteredServices.length !== 1 ? 's' : ''}
-            </p>
+        <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+          <div>
+            <Typography variant="subtitle" size="xl" weight="bold" className="mb-2 text-3xl">Encontre Profissionais</Typography>
+            <Typography variant="body" className="text-base-content/70">Explore os melhores serviços disponíveis na sua região</Typography>
           </div>
+          
+          <div className="join bg-base-100 shadow-sm">
+            <button 
+              className={`join-item btn btn-sm ${viewMode === 'grid' ? 'btn-active btn-primary' : 'btn-ghost'}`}
+              onClick={() => setViewMode('grid')}
+              aria-label="Visualização em Grade"
+            >
+              <LayoutGrid size={18} />
+            </button>
+            <button 
+              className={`join-item btn btn-sm ${viewMode === 'list' ? 'btn-active btn-primary' : 'btn-ghost'}`}
+              onClick={() => setViewMode('list')}
+              aria-label="Visualização em Lista"
+            >
+              <ListIcon size={18} />
+            </button>
+          </div>
+        </div>
 
-          {/* Grid */}
-          {filteredServices.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredServices.map((service) => (
-                <ServiceCard key={service.id} {...service} />
-              ))}
+        <div className="flex flex-col lg:flex-row gap-8">
+
+          <aside className="w-full lg:w-1/4 space-y-6">
+            <div className="bg-base-100 p-6 rounded-xl shadow-sm sticky top-24">
+              <div className="flex items-center justify-between mb-6">
+                <h2 className="font-bold text-lg flex items-center gap-2">
+                  <Filter size={20} /> Filtros
+                </h2>
+                {hasActiveFilters && (
+                  <button
+                    onClick={clearFilters}
+                    className="text-xs text-error hover:underline flex items-center gap-1"
+                  >
+                    <X size={12} /> Limpar tudo
+                  </button>
+                )}
+              </div>
+
+              <div className="form-control mb-6">
+                <label className="label">
+                  <span className="label-text font-semibold">Buscar</span>
+                </label>
+                <div className="relative">
+                  <Input
+                    placeholder="Ex: Encanador..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
+                    className="pl-10"
+                    fullWidth
+                  />
+                  <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50" />
+                </div>
+              </div>
+
+              <div className="form-control mb-6">
+                <label className="label">
+                  <span className="label-text font-semibold">Categorias</span>
+                </label>
+                <div className="flex flex-wrap gap-2">
+                  <Badge 
+                    variant={selectedCategory === null ? 'primary' : 'outline'} 
+                    className="cursor-pointer hover:scale-105 transition-transform"
+                    onClick={() => setSelectedCategory(null)}
+                  >
+                    Todas
+                  </Badge>
+                  {CATEGORIES.map((cat) => (
+                    <Badge
+                      key={cat}
+                      variant={selectedCategory === cat ? 'primary' : 'outline'}
+                      className="cursor-pointer hover:scale-105 transition-transform"
+                      onClick={() => setSelectedCategory(cat)}
+                    >
+                      {cat}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-control">
+                <label className="label">
+                  <span className="label-text font-semibold">Preço Máximo</span>
+                  <span className="label-text-alt font-bold text-primary">{formatCurrency(priceRange[1])}</span>
+                </label>
+                <input
+                  type="range"
+                  min="0"
+                  max="2000"
+                  step="50"
+                  value={priceRange[1]}
+                  onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
+                  className="range range-primary range-xs"
+                />
+                <div className="w-full flex justify-between text-xs px-1 mt-2 text-base-content/50">
+                  <span>R$ 0</span>
+                  <span>R$ 2000+</span>
+                </div>
+              </div>
             </div>
-          ) : (
-            <div className="text-center py-12 bg-base-100 rounded-lg border border-base-300">
-              <p className="text-lg text-base-content/70">
-                Nenhum serviço encontrado com esses filtros
-              </p>
-              <Button
-                variant="ghost"
-                className="mt-4"
-                onClick={() => {
-                  setSearchTerm('');
-                  setFilters({});
-                  setFilteredServices(mockServices);
-                }}
-              >
-                Limpar Filtros
-              </Button>
-            </div>
-          )}
+          </aside>
+
+          {/* Results Grid */}
+          <main className="w-full lg:w-3/4">
+            {filteredServices.length > 0 ? (
+              <div className={
+                viewMode === 'grid' 
+                  ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" 
+                  : "flex flex-col gap-4"
+              }>
+                {filteredServices.map((service) => (
+                  viewMode === 'grid' ? (
+                    <ServiceCard key={service.id} service={service} />
+                  ) : (
+                    <ServiceListItem key={service.id} service={service} />
+                  )
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-20 bg-base-100 rounded-xl border border-dashed border-base-300">
+                <div className="flex flex-col items-center justify-center text-base-content/50">
+                  <Search size={48} className="mb-4 opacity-20" />
+                  <Typography variant="subtitle" size="xl" weight="bold" className="mb-2">Nenhum serviço encontrado</Typography>
+                  <Typography variant="body">Tente ajustar seus filtros ou buscar por outro termo.</Typography>
+                  <Button
+                    variant="ghost"
+                    className="mt-4"
+                    onClick={clearFilters}
+                  >
+                    Limpar Filtros
+                  </Button>
+                </div>
+              </div>
+            )}
+          </main>
+
         </div>
       </div>
     </div>

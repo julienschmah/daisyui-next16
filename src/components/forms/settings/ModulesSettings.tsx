@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Header, Card, Button, Modal, List, type ListItem, Text, ToggleLeft, ToggleRight, Badge } from '@/components/ui';
+import { Header, Card, Button, Modal, List, type ListItem, Typography, ToggleLeft, ToggleRight, Badge } from '@/components/ui';
 import { AlertTriangle } from 'lucide-react';
 
 interface Module {
@@ -85,7 +85,7 @@ export function ModulesSettings() {
 
       <div className="alert ">
         <AlertTriangle size={24} className="text-warning" />
-        <Text color="base">Desativar módulos pode afetar funcionalidades do sistema. Tenha cuidado ao fazer alterações.</Text>
+        <Typography color="base">Desativar módulos pode afetar funcionalidades do sistema. Tenha cuidado ao fazer alterações.</Typography>
       </div>
 
       <div className="flex gap-4">
@@ -96,13 +96,13 @@ export function ModulesSettings() {
       <Card title="Resumo" icon="📊">
         <div className="space-y-3">
           <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-            <Text variant="label" color="primary">Módulos Ativos:</Text>
+            <Typography variant="label" color="primary">Módulos Ativos:</Typography>
             <Badge variant="success" size="lg" className="text-lg font-bold">
               {modules.filter((m) => m.enabled).length}
             </Badge>
           </div>
           <div className="flex justify-between items-center p-3 bg-base-300 rounded-lg">
-            <Text variant="label" color="primary">Módulos Inativos:</Text>
+            <Typography variant="label" color="primary">Módulos Inativos:</Typography>
             <Badge variant="warning" size="lg" className="text-lg font-bold">
               {modules.filter((m) => !m.enabled).length}
             </Badge>
@@ -118,9 +118,9 @@ export function ModulesSettings() {
         size="sm"
       >
         <div className="space-y-4">
-          <Text color="muted">
+          <Typography color="muted">
             Tem certeza que deseja {selectedModule && modules.find(m => m.id === selectedModule)?.enabled ? 'desativar' : 'ativar'} este módulo?
-          </Text>
+          </Typography>
           <div className="flex gap-3 justify-end pt-4">
             <Button variant="ghost" onClick={() => setShowConfirm(false)}>
               Cancelar

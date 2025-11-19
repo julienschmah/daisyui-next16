@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, Header, Input, Button, Text } from '@/components/ui';
+import { Card, Header, Input, Button, Typography } from '@/components/ui';
 
 export function PrestadorSettingsBancarios() {
   const [bancarios, setBancarios] = useState({
@@ -20,12 +20,12 @@ export function PrestadorSettingsBancarios() {
       />
 
       <div className="alert alert-warning">
-        <Text variant="body" weight="semibold">
+        <Typography variant="body" weight="semibold">
           ⚠️ Informações de segurança
-        </Text>
-        <Text variant="caption" className="mt-1">
+        </Typography>
+        <Typography variant="caption" className="mt-1">
           Os dados bancários são criptografados e usados apenas para transferências de seu saldo.
-        </Text>
+        </Typography>
       </div>
 
       <Card title="Dados Bancários" bordered>

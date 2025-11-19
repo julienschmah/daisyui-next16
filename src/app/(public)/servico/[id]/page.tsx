@@ -1,260 +1,155 @@
-'use client';
-
-import { useState } from 'react';
-import { Card, Button, Badge, Text } from '@/components/ui';
-import { Star, MapPin, Clock, Phone, Calendar, DollarSign } from 'lucide-react';
+import { notFound } from 'next/navigation';
+import Image from 'next/image';
 import Link from 'next/link';
+import { MOCK_SERVICES } from '@/mocks/services';
+import { Button, Badge, Card, Typography } from '@/components/ui';
+import { Star, MapPin, Clock, Shield, CheckCircle, Calendar } from 'lucide-react';
+import { formatCurrency } from '@/lib/helpers';
 
-interface ServiceDetailPageProps {
-  params: {
-    id: string;
-  };
+export function generateStaticParams() {
+  return MOCK_SERVICES.map((service) => ({
+    id: service.id,
+  }));
 }
 
-export default function ServiceDetailPage({ params }: ServiceDetailPageProps) {
-  const [quantity, setQuantity] = useState(1);
+export default function ServiceDetailsPage({ params }: { params: { id: string } }) {
+  const service = MOCK_SERVICES.find((s) => s.id === params.id);
 
-  // Mock data
-  const service = {
-    id: parseInt(params.id),
-    title: 'Reparo de Torneira',
-    description: 'Conserto profissional de torneiras com garantia de 30 dias',
-    price: 150,
-    unit: 'serviço',
-    professional: {
-      id: 1,
-      name: 'João Silva',
-      rating: 4.8,
-      reviews: 124,
-      phone: '(11) 99999-9999',
-      location: 'São Paulo, SP',
-      joinedDate: '2020',
-      completedServices: 340,
-    },
-    images: ['🔧', '🔧', '🔧'],
-    category: 'Encanamento',
-    availability: 'Disponível hoje e amanhã',
-    responseTime: 'Responde em menos de 1 hora',
-    materials: ['Torneira nova', 'Mão de obra', 'Garantia 30 dias'],
-    reviews: [
-      {
-        id: 1,
-        author: 'Carlos M.',
-        rating: 5,
-        date: '2025-01-10',
-        comment: 'Excelente profissional! Muito pontual e prestativo.',
-      },
-      {
-        id: 2,
-        author: 'Ana P.',
-        rating: 4.5,
-        date: '2025-01-08',
-        comment: 'Bom trabalho, chegou no horário marcado.',
-      },
-    ],
-  };
-
-  const totalPrice = service.price * quantity;
+  if (!service) {
+    notFound();
+  }
 
   return (
-    <div className="space-y-8">
-      {/* Breadcrumb */}
-      <div className="text-sm breadcrumbs text-base-content/70">
-        <ul>
-          <li>
-            <Link href="/">Home</Link>
-          </li>
-          <li>
-            <Link href="/">{service.category}</Link>
-          </li>
-          <li>{service.title}</li>
-        </ul>
+    <div className="min-h-screen bg-base-200 pb-20">
+      <div className="relative h-[400px] w-full">
+        <Image
+          src={service.image}
+          alt={service.title}
+          fill
+          className="object-cover"
+          priority
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-base-200 to-transparent" />
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 container mx-auto">
+          <Badge variant="primary" className="mb-4">{service.category}</Badge>
+          <h1 className="text-4xl md:text-5xl font-black text-base-content mb-4 shadow-black drop-shadow-lg">
+            {service.title}
+          </h1>
+          <div className="flex items-center gap-4 text-base-content/80">
+            <div className="flex items-center gap-1">
+              <Star className="fill-warning text-warning" />
+              <span className="font-bold text-lg">{service.rating}</span>
+              <Typography variant="caption" size="base">({service.reviewsCount} avaliações)</Typography>
+            </div>
+            <div className="flex items-center gap-1">
+              <MapPin size={18} />
+              <Typography variant="body">São Paulo, SP</Typography>
+            </div>
+          </div>
+        </div>
       </div>
 
-      {/* Grid Principal */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        {/* Esquerda - Imagens e Descrição */}
-        <div className="lg:col-span-2 space-y-6">
-          {/* Imagens */}
-          <div className="bg-base-200 rounded-lg p-8 text-center">
-            <div className="text-8xl">{service.images[0]}</div>
-            <p className="text-sm text-base-content/60 mt-4">Imagens do serviço</p>
+      <div className="container mx-auto px-4 mt-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+
+          <div className="w-full lg:w-2/3 space-y-8">
+
+            <Card className="bg-base-100 shadow-lg">
+              <h2 className="text-2xl font-bold mb-4">Sobre o Serviço</h2>
+              <p className="text-lg leading-relaxed text-base-content/80">
+                {service.description}
+              </p>
+              <div className="divider"></div>
+              <h3 className="font-bold mb-3">O que está incluso:</h3>
+              <ul className="space-y-2">
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={20} className="text-success" />
+                  <span>Mão de obra qualificada</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={20} className="text-success" />
+                  <span>Equipamentos necessários</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={20} className="text-success" />
+                  <span>Limpeza pós-serviço</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <CheckCircle size={20} className="text-success" />
+                  <span>Garantia de 90 dias</span>
+                </li>
+              </ul>
+            </Card>
+
+            <Card className="bg-base-100 shadow-lg">
+              <h2 className="text-2xl font-bold mb-6">Sobre o Profissional</h2>
+              <div className="flex items-start gap-4">
+                <div className="avatar">
+                  <div className="w-20 h-20 rounded-full relative">
+                    <Image
+                      src={service.provider.avatar}
+                      alt={service.provider.name}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold flex items-center gap-2">
+                    {service.provider.name}
+                    {service.provider.verified && (
+                      <div className="tooltip" data-tip="Identidade Verificada">
+                        <Shield size={18} className="text-blue-500" />
+                      </div>
+                    )}
+                  </h3>
+                  <p className="text-base-content/60 mb-2">Membro desde 2023</p>
+                  <p className="text-base-content/80">
+                    Profissional dedicado com mais de 5 anos de experiência na área.
+                    Sempre priorizando a qualidade e a satisfação do cliente.
+                  </p>
+                </div>
+              </div>
+            </Card>
+
           </div>
 
-          {/* Informações do Profissional */}
-          <Card title="Profissional" shadow="md">
-            <div className="space-y-4">
-              <div className="flex items-center gap-4">
-                <div className="avatar placeholder">
-                  <div className="bg-primary text-primary-content rounded-full w-16">
-                    <span className="text-2xl">{service.professional.name.charAt(0)}</span>
+          <div className="w-full lg:w-1/3">
+            <div className="sticky top-24">
+              <Card className="bg-base-100 shadow-xl border-t-4 border-primary">
+                <div className="text-center mb-6">
+                  <span className="text-sm text-base-content/60">Valor estimado</span>
+                  <div className="text-4xl font-black text-primary my-2">
+                    {formatCurrency(service.price)}
                   </div>
+                  <span className="text-xs text-base-content/60">Pode variar conforme complexidade</span>
                 </div>
-                <div className="flex-1">
-                  <h3 className="font-bold text-lg text-primary">
-                    {service.professional.name}
-                  </h3>
-                  <div className="flex items-center gap-2 mb-2">
-                    <Star size={16} className="text-warning" />
-                    <span className="font-semibold">{service.professional.rating}</span>
-                    <span className="text-sm text-base-content/70">
-                      ({service.professional.reviews} avaliações)
-                    </span>
-                  </div>
-                  <Badge variant="success">{service.professional.completedServices} serviços</Badge>
-                </div>
-              </div>
 
-              <div className="divider" />
+                <div className="space-y-4">
+                  <Link href={`/checkout/${service.id}`}>
+                    <Button variant="primary" size="lg" fullWidth className="gap-2">
+                      <Calendar size={20} />
+                      Agendar Agora
+                    </Button>
+                  </Link>
 
-              <div className="space-y-3 text-sm">
-                <div className="flex items-center gap-2">
-                  <MapPin size={18} className="text-primary" />
-                  <span>{service.professional.location}</span>
+                  <Button variant="outline" fullWidth>
+                    Falar com Profissional
+                  </Button>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Phone size={18} className="text-primary" />
-                  <span>{service.professional.phone}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock size={18} className="text-primary" />
-                  <span>{service.responseTime}</span>
-                </div>
-              </div>
 
-              <Button fullWidth variant="secondary">
-                Entrar em Contato
-              </Button>
+                <div className="divider"></div>
+
+                <div className="text-center text-sm text-base-content/60">
+                  <p className="flex items-center justify-center gap-2 mb-2">
+                    <Shield size={16} /> Pagamento Seguro
+                  </p>
+                  <p>Seu dinheiro fica protegido até a conclusão do serviço.</p>
+                </div>
+              </Card>
             </div>
-          </Card>
+          </div>
 
-          {/* Descrição Completa */}
-          <Card title="Descrição do Serviço" shadow="md">
-            <div className="space-y-4">
-              <p className="text-base-content/80">{service.description}</p>
-
-              <div>
-                <h4 className="font-semibold text-base-content mb-3">O que está incluído:</h4>
-                <ul className="space-y-2">
-                  {service.materials.map((material, idx) => (
-                    <li key={idx} className="flex items-center gap-2 text-sm text-base-content/80">
-                      <span className="text-success">✓</span>
-                      {material}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <div className="alert alert-info">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  className="h-6 w-6 shrink-0 stroke-current"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth="2"
-                    d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                  ></path>
-                </svg>
-                <span>Disponibilidade: {service.availability}</span>
-              </div>
-            </div>
-          </Card>
-
-          {/* Avaliações */}
-          <Card title="Avaliações de Clientes" shadow="md">
-            <div className="space-y-4">
-              {service.reviews.map((review) => (
-                <div key={review.id} className="p-4 bg-base-200 rounded-lg">
-                  <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-semibold text-base-content">{review.author}</h4>
-                    <div className="flex items-center gap-1">
-                      {Array(review.rating)
-                        .fill(0)
-                        .map((_, i) => (
-                          <span key={i} className="text-warning">
-                            ★
-                          </span>
-                        ))}
-                    </div>
-                  </div>
-                  <p className="text-sm text-base-content/80 mb-2">{review.comment}</p>
-                  <p className="text-xs text-base-content/60">{review.date}</p>
-                </div>
-              ))}
-            </div>
-          </Card>
-        </div>
-
-        {/* Direita - Resumo e Agendamento */}
-        <div className="lg:col-span-1">
-          <Card title="Agendar Serviço" shadow="lg" className="sticky top-24">
-            <div className="space-y-4">
-              {/* Preço */}
-              <div className="bg-base-200 p-4 rounded-lg">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="text-base-content/70">Preço por {service.unit}:</span>
-                  <span className="text-lg font-bold text-primary">
-                    R$ {service.price.toFixed(2)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Quantidade */}
-              <div>
-                <label className="text-sm font-semibold text-base-content mb-2 block">
-                  Quantidade:
-                </label>
-                <div className="flex items-center gap-2">
-                  <button
-                    className="btn btn-sm btn-outline"
-                    onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                  >
-                    −
-                  </button>
-                  <input
-                    type="number"
-                    min="1"
-                    value={quantity}
-                    onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                    className="input input-sm input-bordered flex-1 text-center"
-                  />
-                  <button
-                    className="btn btn-sm btn-outline"
-                    onClick={() => setQuantity(quantity + 1)}
-                  >
-                    +
-                  </button>
-                </div>
-              </div>
-
-              <div className="divider" />
-
-              {/* Total */}
-              <div className="bg-primary/10 p-4 rounded-lg">
-                <div className="flex items-center justify-between">
-                  <span className="font-semibold text-base-content">Total:</span>
-                  <span className="text-2xl font-bold text-primary">
-                    R$ {totalPrice.toFixed(2)}
-                  </span>
-                </div>
-              </div>
-
-              {/* Botões */}
-              <Link href={`/checkout/${service.id}?quantity=${quantity}`}>
-                <Button fullWidth variant="primary" size="lg">
-                  Prosseguir para Agendamento
-                </Button>
-              </Link>
-
-              <Button fullWidth variant="outline">
-                Adicionar aos Favoritos
-              </Button>
-            </div>
-          </Card>
         </div>
       </div>
     </div>

@@ -6,7 +6,7 @@ import {
   Card,
   Button,
   Modal,
-  Text,
+  Typography,
   Badge,
   Select,
   Toggle,
@@ -203,18 +203,18 @@ export function RequiredFieldsSettings() {
                   <label className="text-xs font-medium text-base-content/80 mb-1.5 block">
                     Tipo
                   </label>
-                  <AnimatedMulti 
-                    
-                 
+                  <AnimatedMulti
+
+
                   />
                 </div>
                 <div>
                   <label className="text-xs font-medium text-base-content/80 mb-1.5 block">
                     Finalidade
                   </label>
-                  <AnimatedMulti 
-                   
-                 
+                  <AnimatedMulti
+
+
                   />
 
                 </div>
@@ -301,13 +301,13 @@ export function RequiredFieldsSettings() {
         size="sm"
       >
         <div className="space-y-4">
-          <Text color="muted">
+          <Typography color="muted">
             Tem certeza que deseja{' '}
             <span className="font-semibold">
               {selectedField?.required ? 'tornar opcional' : 'tornar obrigatório'}
             </span>{' '}
             o campo <span className="font-bold">{selectedField?.name}</span>?
-          </Text>
+          </Typography>
           <div className="flex gap-3 justify-end pt-4">
             <Button variant="ghost" onClick={() => setShowConfirm(false)}>
               Cancelar

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, Header, Toggle, Input, Select, Button, Text } from '@/components/ui';
+import { Card, Header, Toggle, Input, Select, Button, Typography } from '@/components/ui';
 
 export function PrestadorSettingsGeneral() {
   const [settings, setSettings] = useState({

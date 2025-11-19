@@ -13,8 +13,8 @@ export type { ListItem } from './List';
 export { Modal } from './Modal';
 export type { } from './Modal';
 
-export { Text } from './Text';
-export type { } from './Text';
+export { Typography } from './Typography';
+export type { } from './Typography';
 
 export { Badge } from './Badge';
 export type { } from './Badge';
@@ -28,11 +28,12 @@ export type { } from './Select';
 export { MultiSelect } from './MultiSelect';
 export type { MultiSelectOption } from './MultiSelect'; */
 
-export { Toggle } from './Toggle';
-export type { } from './Toggle';
+export * from './Toggle';
 
-export { Accordion } from './Accordion';
-export type { AccordionItemProps } from './Accordion';
+export * from './Accordion';
+
+export * from './ServiceCard';
+export * from './ServiceListItem';
 
 export {
   BarChart3,

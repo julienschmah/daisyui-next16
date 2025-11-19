@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Card, Header, Input, Button, Text, Badge } from '@/components/ui';
+import { Card, Header, Input, Button, Typography, Badge } from '@/components/ui';
 
 export function PrestadorSettingsDados() {
   const [dados, setDados] = useState({
@@ -69,16 +69,16 @@ export function PrestadorSettingsDados() {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <div>
-              <Text variant="label">E-mail Verificado</Text>
-              <Text variant="caption">Confirmado em 15/11/2024</Text>
+              <Typography variant="label">E-mail Verificado</Typography>
+              <Typography variant="caption">Confirmado em 15/11/2024</Typography>
             </div>
             <Badge variant="success">✓ Verificado</Badge>
           </div>
           <div className="divider my-2"></div>
           <div className="flex items-center justify-between">
             <div>
-              <Text variant="label">Telefone Verificado</Text>
-              <Text variant="caption">Confirmado em 14/11/2024</Text>
+              <Typography variant="label">Telefone Verificado</Typography>
+              <Typography variant="caption">Confirmado em 14/11/2024</Typography>
             </div>
             <Badge variant="success">✓ Verificado</Badge>
           </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
+interface TypographyProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: 'body' | 'label' | 'caption' | 'badge' | 'subtitle';
   size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
   weight?: 'light' | 'normal' | 'semibold' | 'bold';
@@ -8,14 +8,14 @@ interface TextProps extends React.HTMLAttributes<HTMLSpanElement> {
   children: React.ReactNode;
 }
 
-export function Text({
+export function Typography({
   variant = 'body',
   size = 'base',
   weight = 'normal',
   color = 'base',
   className = '',
   ...props
-}: TextProps) {
+}: TypographyProps) {
   const variantClasses = {
     body: 'text-base-content',
     label: 'text-base-content font-semibold',

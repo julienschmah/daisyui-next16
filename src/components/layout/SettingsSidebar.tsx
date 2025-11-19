@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Text, Modal, Button } from '@/components/ui';
+import { Typography, Modal, Button } from '@/components/ui';
 import { Lightbulb, ChevronLeft } from 'lucide-react';
 
 interface SettingsSection {
@@ -77,10 +77,10 @@ export function SettingsSidebar({ onSectionChange, hasChanges: initialHasChanges
   return (
     <aside className="w-80 bg-base-200 min-h-screen p-6 border-r border-base-300 overflow-y-auto hidden lg:block">
       <div className="mb-8">
-        <Text variant="label" size="xl" weight="bold" color="primary" className="mb-2 block">
+        <Typography variant="label" size="xl" weight="bold" color="primary" className="mb-2 block">
           ⚙️ Configurações
-        </Text>
-        <Text variant="subtitle" color="muted">Gerencie todas as opções do seu sistema</Text>
+        </Typography>
+        <Typography variant="subtitle" color="muted">Gerencie todas as opções do seu sistema</Typography>
       </div>
 
       <div className="divider my-4"></div>
@@ -90,17 +90,16 @@ export function SettingsSidebar({ onSectionChange, hasChanges: initialHasChanges
           <button
             key={section.id}
             onClick={() => handleSectionChange(section.id)}
-            className={`w-full text-left px-4 py-3 rounded-lg transition-all ${
-              activeSection === section.id
-                ? 'bg-primary text-primary-content shadow-lg'
-                : 'hover:bg-base-300 text-base-content'
-            }`}
+            className={`w-full text-left px-4 py-3 rounded-lg transition-all ${activeSection === section.id
+              ? 'bg-primary text-primary-content shadow-lg'
+              : 'hover:bg-base-300 text-base-content'
+              }`}
           >
             <div className="flex items-center gap-3">
               <span className="text-xl">{section.icon}</span>
               <div className="flex-1">
-                <Text variant="label" weight="semibold" size="base">{section.title}</Text>
-                <Text variant="caption" size="xs">{section.description}</Text>
+                <Typography variant="label" weight="semibold" size="base">{section.title}</Typography>
+                <Typography variant="caption" size="xs">{section.description}</Typography>
               </div>
             </div>
           </button>
@@ -112,9 +111,9 @@ export function SettingsSidebar({ onSectionChange, hasChanges: initialHasChanges
       <div className="bg-base-300 rounded-lg p-4">
         <div className="flex items-start gap-2">
           <Lightbulb size={16} className="text-warning flex-shrink-0 mt-1" />
-          <Text variant="caption" color="muted">
+          <Typography variant="caption" color="muted">
             <span className="font-semibold">Dica:</span> Todas as mudanças são salvas automaticamente. Use o menu ao lado para navegar entre as configurações.
-          </Text>
+          </Typography>
         </div>
       </div>
 
@@ -135,9 +134,9 @@ export function SettingsSidebar({ onSectionChange, hasChanges: initialHasChanges
         title="Mudanças não salvas"
       >
         <div className="space-y-4">
-          <Text variant="body">
+          <Typography variant="body">
             Você tem alterações não salvas. Deseja sair mesmo assim?
-          </Text>
+          </Typography>
           <div className="flex gap-3 justify-end pt-4 border-t">
             <Button
               variant="ghost"
