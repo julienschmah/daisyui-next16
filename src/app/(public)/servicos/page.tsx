@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { ServiceCard, ServiceListItem, Input, Button, Typography, Badge } from '@/components/ui';
+import { FilterSidebar } from '@/components/public/FilterSidebar';
 import { MOCK_SERVICES, CATEGORIES } from '@/mocks/services';
 import { Search, Filter, X, LayoutGrid, List as ListIcon } from 'lucide-react';
 import { formatCurrency } from '@/lib/helpers';
@@ -38,16 +39,16 @@ export default function ServicesPage() {
             <Typography variant="subtitle" size="xl" weight="bold" className="mb-2 text-3xl">Encontre Profissionais</Typography>
             <Typography variant="body" className="text-base-content/70">Explore os melhores serviços disponíveis na sua região</Typography>
           </div>
-          
+
           <div className="join bg-base-100 shadow-sm">
-            <button 
+            <button
               className={`join-item btn btn-sm ${viewMode === 'grid' ? 'btn-active btn-primary' : 'btn-ghost'}`}
               onClick={() => setViewMode('grid')}
               aria-label="Visualização em Grade"
             >
               <LayoutGrid size={18} />
             </button>
-            <button 
+            <button
               className={`join-item btn btn-sm ${viewMode === 'list' ? 'btn-active btn-primary' : 'btn-ghost'}`}
               onClick={() => setViewMode('list')}
               aria-label="Visualização em Lista"
@@ -60,90 +61,23 @@ export default function ServicesPage() {
         <div className="flex flex-col lg:flex-row gap-8">
 
           <aside className="w-full lg:w-1/4 space-y-6">
-            <div className="bg-base-100 p-6 rounded-xl shadow-sm sticky top-24">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="font-bold text-lg flex items-center gap-2">
-                  <Filter size={20} /> Filtros
-                </h2>
-                {hasActiveFilters && (
-                  <button
-                    onClick={clearFilters}
-                    className="text-xs text-error hover:underline flex items-center gap-1"
-                  >
-                    <X size={12} /> Limpar tudo
-                  </button>
-                )}
-              </div>
-
-              <div className="form-control mb-6">
-                <label className="label">
-                  <span className="label-text font-semibold">Buscar</span>
-                </label>
-                <div className="relative">
-                  <Input
-                    placeholder="Ex: Encanador..."
-                    value={searchTerm}
-                    onChange={(e) => setSearchTerm(e.target.value)}
-                    className="pl-10"
-                    fullWidth
-                  />
-                  <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50" />
-                </div>
-              </div>
-
-              <div className="form-control mb-6">
-                <label className="label">
-                  <span className="label-text font-semibold">Categorias</span>
-                </label>
-                <div className="flex flex-wrap gap-2">
-                  <Badge 
-                    variant={selectedCategory === null ? 'primary' : 'outline'} 
-                    className="cursor-pointer hover:scale-105 transition-transform"
-                    onClick={() => setSelectedCategory(null)}
-                  >
-                    Todas
-                  </Badge>
-                  {CATEGORIES.map((cat) => (
-                    <Badge
-                      key={cat}
-                      variant={selectedCategory === cat ? 'primary' : 'outline'}
-                      className="cursor-pointer hover:scale-105 transition-transform"
-                      onClick={() => setSelectedCategory(cat)}
-                    >
-                      {cat}
-                    </Badge>
-                  ))}
-                </div>
-              </div>
-
-              <div className="form-control">
-                <label className="label">
-                  <span className="label-text font-semibold">Preço Máximo</span>
-                  <span className="label-text-alt font-bold text-primary">{formatCurrency(priceRange[1])}</span>
-                </label>
-                <input
-                  type="range"
-                  min="0"
-                  max="2000"
-                  step="50"
-                  value={priceRange[1]}
-                  onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
-                  className="range range-primary range-xs"
-                />
-                <div className="w-full flex justify-between text-xs px-1 mt-2 text-base-content/50">
-                  <span>R$ 0</span>
-                  <span>R$ 2000+</span>
-                </div>
-              </div>
-            </div>
+            <FilterSidebar
+              searchTerm={searchTerm}
+              setSearchTerm={setSearchTerm}
+              selectedCategory={selectedCategory}
+              setSelectedCategory={setSelectedCategory}
+              priceRange={priceRange}
+              setPriceRange={setPriceRange}
+              clearFilters={clearFilters}
+            />
           </aside>
 
           {/* Results Grid */}
           <main className="w-full lg:w-3/4">
             {filteredServices.length > 0 ? (
               <div className={
-                viewMode === 'grid' 
-                  ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6" 
+                viewMode === 'grid'
+                  ? "grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
                   : "flex flex-col gap-4"
               }>
                 {filteredServices.map((service) => (

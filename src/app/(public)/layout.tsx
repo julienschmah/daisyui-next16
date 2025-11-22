@@ -1,5 +1,6 @@
 import React from 'react';
 import { Navbar } from '@/components/layout/Navbar';
+import { Footer } from '@/components/layout/Footer';
 
 export default function PublicLayout({
   children,
@@ -15,12 +16,7 @@ export default function PublicLayout({
         {children}
       </main>
 
-      {/* Footer */}
-      <footer className="footer footer-center p-4 bg-base-200 text-base-content mt-12">
-        <aside>
-          <p>© 2025 ServiceHub. Encontre profissionais confiáveis para qualquer serviço.</p>
-        </aside>
-      </footer>
+      <Footer />
     </div>
   );
 }

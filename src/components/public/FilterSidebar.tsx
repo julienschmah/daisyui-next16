@@ -1,142 +1,100 @@
 'use client';
 
-import { useState } from 'react';
-import { Button, Input, Select, Badge, Toggle } from '@/components/ui';
-import { Search, MapPin, DollarSign, Star } from 'lucide-react';
+import { Input } from '@/components/ui';
+import { Search, Filter } from 'lucide-react';
+import { CATEGORIES } from '@/mocks/services';
+import { formatCurrency } from '@/lib/helpers';
 
 interface FilterSidebarProps {
-  onFilterChange?: (filters: any) => void;
+  searchTerm: string;
+  setSearchTerm: (value: string) => void;
+  selectedCategory: string | null;
+  setSelectedCategory: (category: string | null) => void;
+  priceRange: [number, number];
+  setPriceRange: (range: [number, number]) => void;
+  clearFilters: () => void;
 }
 
-export function FilterSidebar({ onFilterChange }: FilterSidebarProps) {
-  const [filters, setFilters] = useState({
-    category: '',
-    minPrice: '',
-    maxPrice: '',
-    location: '',
-    rating: '',
-    available: true,
-  });
-
-  const handleChange = (key: string, value: any) => {
-    const newFilters = { ...filters, [key]: value };
-    setFilters(newFilters);
-    onFilterChange?.(newFilters);
-  };
-
+export function FilterSidebar({
+  searchTerm,
+  setSearchTerm,
+  selectedCategory,
+  setSelectedCategory,
+  priceRange,
+  setPriceRange,
+  clearFilters
+}: FilterSidebarProps) {
   return (
-    <div className="bg-base-100 border border-base-300 rounded-lg p-6 space-y-6 sticky top-24">
-      {/* Categoria */}
-      <div>
-        <h3 className="font-semibold text-base-content mb-3 flex items-center gap-2">
-          <Search size={18} />
-          Categoria
-        </h3>
-        <Select
-          fullWidth
-          selectSize="sm"
-          options={[
-            { value: '', label: 'Todas' },
-            { value: 'plumbing', label: 'Encanamento' },
-            { value: 'electrical', label: 'Elétrica' },
-            { value: 'cleaning', label: 'Limpeza' },
-            { value: 'painting', label: 'Pintura' },
-            { value: 'carpentry', label: 'Carpintaria' },
-            { value: 'hvac', label: 'HVAC' },
-            { value: 'landscaping', label: 'Paisagismo' },
-          ]}
-          value={filters.category}
-          onChange={(e) => handleChange('category', e.target.value)}
-        />
+    <div className="bg-[#1a1a1a] text-white rounded-xl p-6 shadow-xl border border-white/5 sticky top-24">
+      <div className="flex items-center gap-2 mb-8">
+        <Filter className="text-white" size={20} />
+        <h2 className="text-xl font-bold">Filtros</h2>
       </div>
 
-      {/* Localização */}
-      <div>
-        <h3 className="font-semibold text-base-content mb-3 flex items-center gap-2">
-          <MapPin size={18} />
-          Localização
-        </h3>
-        <Input
-          placeholder="Digite sua localidade"
-          value={filters.location}
-          onChange={(e) => handleChange('location', e.target.value)}
-          fullWidth
-          inputSize="sm"
-        />
-      </div>
+      <div className="space-y-8">
+        <div>
+          <label className="text-gray-400 font-semibold mb-3 block">Buscar</label>
+          <div className="relative">
+            <Input
+              placeholder="Ex: Encanador..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="bg-[#2a2a2a] border-gray-700 text-white placeholder:text-gray-500 focus:border-orange-500 focus:ring-orange-500 pl-10 w-full h-12 rounded-lg"
+              fullWidth
+            />
+            <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+          </div>
+        </div>
 
-      {/* Faixa de Preço */}
-      <div>
-        <h3 className="font-semibold text-base-content mb-3 flex items-center gap-2">
-          <DollarSign size={18} />
-          Faixa de Preço
-        </h3>
-        <div className="space-y-2">
-          <Input
-            type="number"
-            placeholder="Mínimo"
-            value={filters.minPrice}
-            onChange={(e) => handleChange('minPrice', e.target.value)}
-            fullWidth
-            inputSize="sm"
+        <div>
+          <label className="text-gray-400 font-semibold mb-3 block">Categorias</label>
+          <div className="flex flex-wrap gap-2">
+            <button
+              onClick={() => setSelectedCategory(null)}
+              className={`px-4 py-2 rounded-full text-sm transition-all duration-200 border ${selectedCategory === null
+                  ? 'bg-orange-500 border-orange-500 text-white font-medium'
+                  : 'bg-transparent border-gray-700 text-gray-300 hover:border-gray-500'
+                }`}
+            >
+              Todas
+            </button>
+            {CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => setSelectedCategory(cat)}
+                className={`px-4 py-2 rounded-full text-sm transition-all duration-200 border ${selectedCategory === cat
+                    ? 'bg-orange-500 border-orange-500 text-white font-medium'
+                    : 'bg-transparent border-gray-700 text-gray-300 hover:border-gray-500'
+                  }`}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div>
+          <div className="flex justify-between items-center mb-4">
+            <label className="text-gray-400 font-semibold">Preço Máximo</label>
+            <span className="text-orange-500 font-bold text-lg">
+              {formatCurrency(priceRange[1])}
+            </span>
+          </div>
+          <input
+            type="range"
+            min="0"
+            max="2000"
+            step="50"
+            value={priceRange[1]}
+            onChange={(e) => setPriceRange([0, parseInt(e.target.value)])}
+            className="w-full h-2 bg-[#2a2a2a] rounded-lg appearance-none cursor-pointer accent-orange-500"
           />
-          <Input
-            type="number"
-            placeholder="Máximo"
-            value={filters.maxPrice}
-            onChange={(e) => handleChange('maxPrice', e.target.value)}
-            fullWidth
-            inputSize="sm"
-          />
+          <div className="flex justify-between text-xs text-gray-500 mt-2">
+            <span>R$ 0</span>
+            <span>R$ 2000+</span>
+          </div>
         </div>
       </div>
-
-      {/* Avaliação Mínima */}
-      <div>
-        <h3 className="font-semibold text-base-content mb-3 flex items-center gap-2">
-          <Star size={18} />
-          Avaliação Mínima
-        </h3>
-        <Select
-          fullWidth
-          selectSize="sm"
-          options={[
-            { value: '', label: 'Qualquer uma' },
-            { value: '4', label: '⭐⭐⭐⭐ (4+)' },
-            { value: '4.5', label: '⭐⭐⭐⭐+ (4.5+)' },
-            { value: '5', label: '⭐⭐⭐⭐⭐ (5.0)' },
-          ]}
-          value={filters.rating}
-          onChange={(e) => handleChange('rating', e.target.value)}
-        />
-      </div>
-
-      {/* Disponível Agora */}
-      <div>
-        <Toggle
-          label="Disponível nos próximos 7 dias"
-          checked={filters.available}
-          onChange={(e) => handleChange('available', e.target.checked)}
-        />
-      </div>
-
-      {/* Botão Limpar */}
-      <Button
-        variant="ghost"
-        fullWidth
-        onClick={() => {
-          setFilters({
-            category: '',
-            minPrice: '',
-            maxPrice: '',
-            location: '',
-            rating: '',
-            available: true,
-          });
-        }}
-      >
-        Limpar Filtros
-      </Button>
     </div>
   );
 }

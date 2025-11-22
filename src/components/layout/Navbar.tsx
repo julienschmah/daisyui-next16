@@ -2,8 +2,9 @@
 
 import Link from 'next/link';
 import { useTheme } from '@/app/providers';
-import { Button, Input } from '@/components/ui';
-import { Menu, Search } from 'lucide-react';
+import { Button } from '@/components/ui';
+import { ThemeDropdown } from './ThemeDropdown';
+import { Menu } from 'lucide-react';
 
 export function Navbar() {
   const { theme, changeTheme, mounted } = useTheme();
@@ -26,18 +27,14 @@ export function Navbar() {
         </Link>
       </div>
 
-      <div className="navbar-center hidden lg:flex flex-1 max-w-2xl mx-auto">
-        <div className="relative w-full">
-          <Input
-            placeholder="Buscar serviços..."
-            className="w-full pl-10 bg-base-200 border-transparent focus:bg-base-100 transition-all"
-            fullWidth
-          />
-          <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50" />
-        </div>
+      <div className="navbar-center hidden lg:flex flex-1 max-w-2xl mx-auto justify-center">
+        <Link href="/servicos" className="text-base-content/80 hover:text-primary font-medium transition-colors text-lg">
+          Serviços
+        </Link>
       </div>
 
       <div className="navbar-end gap-3">
+        <ThemeDropdown />
         <Link href="/login">
           <Button variant="ghost" className="font-semibold">
             Entrar
