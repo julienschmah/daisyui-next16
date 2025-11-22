@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  role      String   @default("user") // user, provider, admin
+  avatar    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  services  Service[]
+  bookings  Booking[] @relation("ClientBookings")
+  reviews   Review[]
+}
+
+model Service {
+  id           String   @id @default(cuid())
+  title        String
+  description  String
+  price        Decimal
+  category     String
+  image        String
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // Relations
+  providerId   String
+  provider     User      @relation(fields: [providerId], references: [id])
+  bookings     Booking[]
+  reviews      Review[]
+}
+
+model Booking {
+  id        String   @id @default(cuid())
+  date      DateTime
+  status    String   @default("pending") // pending, confirmed, completed, cancelled
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  clientId  String
+  client    User     @relation("ClientBookings", fields: [clientId], references: [id])
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id])
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  rating    Int
+  comment   String?
+  createdAt DateTime @default(now())
+
+  // Relations
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  serviceId String
+  service   Service  @relation(fields: [serviceId], references: [id])
+}
