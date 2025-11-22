@@ -5,9 +5,11 @@ import { useTheme } from '@/app/providers';
 import { Button } from '@/components/ui';
 import { ThemeDropdown } from './ThemeDropdown';
 import { Menu } from 'lucide-react';
+import { useUserStore } from '@/store';
 
 export function Navbar() {
   const { theme, changeTheme, mounted } = useTheme();
+  const { user, isAuthenticated, logout } = useUserStore();
 
   if (!mounted) return null;
 
@@ -35,16 +37,41 @@ export function Navbar() {
 
       <div className="navbar-end gap-3">
         <ThemeDropdown />
-        <Link href="/login">
-          <Button variant="ghost" className="font-semibold">
-            Entrar
-          </Button>
-        </Link>
-        <Link href="/register">
-          <Button variant="primary" className="font-bold px-6">
-            Cadastro
-          </Button>
-        </Link>
+
+        {mounted && isAuthenticated && user ? (
+          <div className="dropdown dropdown-end">
+            <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
+              <div className="w-10 rounded-full">
+                <img alt="Avatar" src={`https://ui-avatars.com/api/?name=${user.name}&background=random`} />
+              </div>
+            </div>
+            <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow-menu menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
+              <li>
+                <Link href="/meus-agendamentos" className="justify-between">
+                  Meus Agendamentos
+                  <span className="badge badge-sm badge-primary">Novo</span>
+                </Link>
+              </li>
+              <li><Link href="/historico">Histórico</Link></li>
+              <li><Link href="/perfil">Perfil</Link></li>
+              <div className="divider my-0"></div>
+              <li><button onClick={logout} className="text-error">Sair</button></li>
+            </ul>
+          </div>
+        ) : (
+          <>
+            <Link href="/login">
+              <Button variant="ghost" className="font-semibold">
+                Entrar
+              </Button>
+            </Link>
+            <Link href="/register">
+              <Button variant="primary" className="font-bold px-6">
+                Cadastro
+              </Button>
+            </Link>
+          </>
+        )}
       </div>
     </div>
   );

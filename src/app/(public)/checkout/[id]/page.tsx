@@ -8,8 +8,9 @@ export function generateStaticParams() {
   }));
 }
 
-export default function CheckoutPage({ params }: { params: { id: string } }) {
-  const service = MOCK_SERVICES.find((s) => s.id === params.id);
+export default async function CheckoutPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const service = MOCK_SERVICES.find((s) => s.id === id);
 
   if (!service) {
     notFound();

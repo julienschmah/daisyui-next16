@@ -12,8 +12,9 @@ export function generateStaticParams() {
   }));
 }
 
-export default function ServiceDetailsPage({ params }: { params: { id: string } }) {
-  const service = MOCK_SERVICES.find((s) => s.id === params.id);
+export default async function ServiceDetailsPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const service = MOCK_SERVICES.find((s) => s.id === id);
 
   if (!service) {
     notFound();
@@ -21,7 +22,8 @@ export default function ServiceDetailsPage({ params }: { params: { id: string } 
 
   return (
     <div className="min-h-screen bg-base-200 pb-20">
-      <div className="relative h-[400px] w-full">
+      {/* Hero Section with Gradient Overlay */}
+      <div className="relative h-[500px] w-full">
         <Image
           src={service.image}
           alt={service.title}
@@ -29,122 +31,147 @@ export default function ServiceDetailsPage({ params }: { params: { id: string } 
           className="object-cover"
           priority
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-base-200 to-transparent" />
-        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-8 container mx-auto">
-          <Badge variant="primary" className="mb-4">{service.category}</Badge>
-          <h1 className="text-4xl md:text-5xl font-black text-base-content mb-4 shadow-black drop-shadow-lg">
-            {service.title}
-          </h1>
-          <div className="flex items-center gap-4 text-base-content/80">
-            <div className="flex items-center gap-1">
-              <Star className="fill-warning text-warning" />
-              <span className="font-bold text-lg">{service.rating}</span>
-              <Typography variant="caption" size="base">({service.reviewsCount} avaliações)</Typography>
-            </div>
-            <div className="flex items-center gap-1">
-              <MapPin size={18} />
-              <Typography variant="body">São Paulo, SP</Typography>
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0f172a] via-[#0f172a]/60 to-transparent" />
+
+        <div className="absolute bottom-0 left-0 right-0 p-4 md:p-12 container mx-auto">
+          <div className="max-w-4xl">
+            <Badge className="badge-secondary border-none px-4 py-1 text-sm font-bold mb-6">
+              {service.category}
+            </Badge>
+            <h1 className="text-4xl md:text-6xl font-black text-white mb-6 leading-tight drop-shadow-lg">
+              {service.title}
+            </h1>
+            <div className="flex flex-wrap items-center gap-6 text-white/90">
+              <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <Star className="fill-warning text-warning" size={20} />
+                <span className="font-bold text-xl">{service.rating}</span>
+                <span className="text-sm opacity-80">({service.reviewsCount} avaliações)</span>
+              </div>
+              <div className="flex items-center gap-2 bg-white/10 px-3 py-1.5 rounded-full backdrop-blur-sm">
+                <MapPin size={20} className="text-secondary" />
+                <span className="font-medium">São Paulo, SP</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-4 mt-8">
+      <div className="container mx-auto px-4 -mt-10 relative z-10">
         <div className="flex flex-col lg:flex-row gap-8">
 
+          {/* Main Content */}
           <div className="w-full lg:w-2/3 space-y-8">
 
-            <Card className="bg-base-100 shadow-lg">
-              <h2 className="text-2xl font-bold mb-4">Sobre o Serviço</h2>
-              <p className="text-lg leading-relaxed text-base-content/80">
-                {service.description}
-              </p>
-              <div className="divider"></div>
-              <h3 className="font-bold mb-3">O que está incluso:</h3>
-              <ul className="space-y-2">
-                <li className="flex items-center gap-2">
-                  <CheckCircle size={20} className="text-success" />
-                  <span>Mão de obra qualificada</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle size={20} className="text-success" />
-                  <span>Equipamentos necessários</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle size={20} className="text-success" />
-                  <span>Limpeza pós-serviço</span>
-                </li>
-                <li className="flex items-center gap-2">
-                  <CheckCircle size={20} className="text-success" />
-                  <span>Garantia de 90 dias</span>
-                </li>
-              </ul>
-            </Card>
+            {/* Service Description */}
+            <Card className="bg-base-100 shadow-xl border-none rounded-3xl overflow-hidden">
+              <div className="p-8">
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                  <span className="w-1 h-8 bg-primary rounded-full"></span>
+                  Sobre o Serviço
+                </h2>
+                <p className="text-lg leading-relaxed text-base-content/80">
+                  {service.description}
+                </p>
 
-            <Card className="bg-base-100 shadow-lg">
-              <h2 className="text-2xl font-bold mb-6">Sobre o Profissional</h2>
-              <div className="flex items-start gap-4">
-                <div className="avatar">
-                  <div className="w-20 h-20 rounded-full relative">
-                    <Image
-                      src={service.provider.avatar}
-                      alt={service.provider.name}
-                      fill
-                      className="object-cover"
-                    />
+                <div className="divider my-8"></div>
+
+                <h3 className="font-bold text-lg mb-4">O que está incluso:</h3>
+                <div className="grid sm:grid-cols-2 gap-4">
+                  <div className="flex items-center gap-3 p-3 bg-base-200/50 rounded-xl">
+                    <CheckCircle size={20} className="text-success" />
+                    <span className="font-medium">Mão de obra qualificada</span>
                   </div>
-                </div>
-                <div>
-                  <h3 className="text-xl font-bold flex items-center gap-2">
-                    {service.provider.name}
-                    {service.provider.verified && (
-                      <div className="tooltip" data-tip="Identidade Verificada">
-                        <Shield size={18} className="text-blue-500" />
-                      </div>
-                    )}
-                  </h3>
-                  <p className="text-base-content/60 mb-2">Membro desde 2023</p>
-                  <p className="text-base-content/80">
-                    Profissional dedicado com mais de 5 anos de experiência na área.
-                    Sempre priorizando a qualidade e a satisfação do cliente.
-                  </p>
+                  <div className="flex items-center gap-3 p-3 bg-base-200/50 rounded-xl">
+                    <CheckCircle size={20} className="text-success" />
+                    <span className="font-medium">Equipamentos necessários</span>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-base-200/50 rounded-xl">
+                    <CheckCircle size={20} className="text-success" />
+                    <span className="font-medium">Limpeza pós-serviço</span>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-base-200/50 rounded-xl">
+                    <CheckCircle size={20} className="text-success" />
+                    <span className="font-medium">Garantia de 90 dias</span>
+                  </div>
                 </div>
               </div>
             </Card>
 
+            {/* Provider Card */}
+            <Card className="bg-base-100 shadow-xl border-none rounded-3xl overflow-hidden">
+              <div className="p-8">
+                <h2 className="text-2xl font-bold mb-6 flex items-center gap-2">
+                  <span className="w-1 h-8 bg-secondary rounded-full"></span>
+                  Sobre o Profissional
+                </h2>
+                <div className="flex flex-col sm:flex-row items-start gap-6">
+                  <div className="avatar">
+                    <div className="w-24 h-24 rounded-full relative ring-4 ring-base-200">
+                      <Image
+                        src={service.provider.avatar}
+                        alt={service.provider.name}
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-2xl font-bold flex items-center gap-2 mb-1">
+                      {service.provider.name}
+                      {service.provider.verified && (
+                        <div className="tooltip" data-tip="Identidade Verificada">
+                          <Shield size={20} className="text-blue-500" />
+                        </div>
+                      )}
+                    </h3>
+                    <p className="text-base-content/60 mb-4 font-medium">Membro desde 2023</p>
+                    <p className="text-base-content/80 leading-relaxed">
+                      Profissional dedicado com mais de 5 anos de experiência na área.
+                      Sempre priorizando a qualidade e a satisfação do cliente.
+                      Especialista em resolver problemas complexos com eficiência.
+                    </p>
+                    <div className="mt-4 flex gap-3">
+                      <Badge variant="outline">500+ Projetos</Badge>
+                      <Badge variant="outline">Nota 4.9</Badge>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </Card>
           </div>
 
+          {/* Sidebar / Booking Card */}
           <div className="w-full lg:w-1/3">
             <div className="sticky top-24">
-              <Card className="bg-base-100 shadow-xl border-t-4 border-primary">
-                <div className="text-center mb-6">
-                  <span className="text-sm text-base-content/60">Valor estimado</span>
-                  <div className="text-4xl font-black text-primary my-2">
+              <Card className="bg-base-100 shadow-2xl border-none rounded-3xl overflow-hidden">
+                <div className="p-6 bg-primary text-primary-content text-center">
+                  <span className="text-sm opacity-80 uppercase tracking-wider font-bold">Valor estimado</span>
+                  <div className="text-5xl font-black text-secondary my-3">
                     {formatCurrency(service.price)}
                   </div>
-                  <span className="text-xs text-base-content/60">Pode variar conforme complexidade</span>
+                  <span className="text-xs opacity-60">Pode variar conforme complexidade</span>
                 </div>
 
-                <div className="space-y-4">
-                  <Link href={`/checkout/${service.id}`}>
-                    <Button variant="primary" size="lg" fullWidth className="gap-2">
-                      <Calendar size={20} />
+                <div className="p-6 space-y-4">
+                  <Link href={`/checkout/${service.id}`} className="block">
+                    <Button className="w-full btn-secondary text-secondary-content border-none h-14 text-lg font-bold rounded-xl shadow-lg gap-2">
+                      <Calendar size={22} />
                       Agendar Agora
                     </Button>
                   </Link>
 
-                  <Button variant="outline" fullWidth>
+                  <Button variant="outline" fullWidth className="h-12 font-bold rounded-xl border-2">
                     Falar com Profissional
                   </Button>
-                </div>
 
-                <div className="divider"></div>
+                  <div className="divider"></div>
 
-                <div className="text-center text-sm text-base-content/60">
-                  <p className="flex items-center justify-center gap-2 mb-2">
-                    <Shield size={16} /> Pagamento Seguro
-                  </p>
-                  <p>Seu dinheiro fica protegido até a conclusão do serviço.</p>
+                  <div className="text-center text-sm text-base-content/60 space-y-2">
+                    <p className="flex items-center justify-center gap-2 font-medium">
+                      <Shield size={16} className="text-success" /> Pagamento 100% Seguro
+                    </p>
+                    <p>Seu dinheiro fica protegido até a conclusão do serviço.</p>
+                  </div>
                 </div>
               </Card>
             </div>

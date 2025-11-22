@@ -7,12 +7,16 @@ import { Service } from '@/mocks/services';
 import { Button, Input, Card, Typography } from '@/components/ui';
 import { Calendar, Clock, CreditCard, CheckCircle } from 'lucide-react';
 import { formatCurrency } from '@/lib/helpers';
+import { getProviderAvailability } from '@/mocks/availability';
 
 export function CheckoutFlow({ service }: { service: Service }) {
     const router = useRouter();
     const [step, setStep] = useState(1);
     const [date, setDate] = useState('');
     const [time, setTime] = useState('');
+
+    // Get mock availability for this provider
+    const availability = getProviderAvailability(service.provider.id);
 
     const handleConfirm = () => {
         setStep(3); // Success state
@@ -50,40 +54,71 @@ export function CheckoutFlow({ service }: { service: Service }) {
                     <div className="w-full lg:w-2/3 space-y-6">
 
                         <Card className={`bg-base-100 shadow-md transition-opacity ${step !== 1 ? 'opacity-50 pointer-events-none' : ''}`}>
-                            <div className="flex items-center gap-3 mb-4">
+                            <div className="flex items-center gap-3 mb-6">
                                 <div className="w-8 h-8 rounded-full bg-primary text-primary-content flex items-center justify-center font-bold">1</div>
-                                <Typography variant="subtitle" size="lg" weight="bold">Agendamento</Typography>
+                                <Typography variant="subtitle" size="lg" weight="bold">Escolha o Horário</Typography>
                             </div>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                <div className="form-control">
-                                    <label className="label">
-                                        <Typography variant="label">Data</Typography>
-                                    </label>
-                                    <div className="relative">
-                                        <Input
-                                            type="date"
-                                            className="w-full pl-10"
-                                            value={date}
-                                            onChange={(e) => setDate(e.target.value)}
-                                        />
-                                        <Calendar size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50" />
-                                    </div>
+                            <div className="mb-6">
+                                <Typography variant="label" className="mb-2 block">Data</Typography>
+                                <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
+                                    {availability.map((day) => {
+                                        const dateObj = new Date(day.date + 'T00:00:00');
+                                        const isSelected = date === day.date;
+                                        const dayName = dateObj.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '');
+                                        const dayNumber = dateObj.getDate();
+
+                                        return (
+                                            <button
+                                                key={day.date}
+                                                onClick={() => {
+                                                    setDate(day.date);
+                                                    setTime(''); // Reset time when date changes
+                                                }}
+                                                className={`
+                                                    flex flex-col items-center justify-center min-w-[70px] h-20 rounded-xl border-2 transition-all
+                                                    ${isSelected
+                                                        ? 'border-primary bg-primary/10 text-primary'
+                                                        : 'border-base-300 hover:border-primary/50 bg-base-100'
+                                                    }
+                                                `}
+                                            >
+                                                <span className="text-xs uppercase font-bold opacity-70">{dayName}</span>
+                                                <span className="text-xl font-black">{dayNumber}</span>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
-                                <div className="form-control">
-                                    <label className="label">
-                                        <Typography variant="label">Horário</Typography>
-                                    </label>
-                                    <div className="relative">
-                                        <Input
-                                            type="time"
-                                            className="w-full pl-10"
-                                            value={time}
-                                            onChange={(e) => setTime(e.target.value)}
-                                        />
-                                        <Clock size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-base-content/50" />
+                            </div>
+
+                            <div className="mb-6">
+                                <Typography variant="label" className="mb-2 block">Horários Disponíveis</Typography>
+                                {date ? (
+                                    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3">
+                                        {availability.find(d => d.date === date)?.slots.map((slot) => (
+                                            <button
+                                                key={slot.time}
+                                                disabled={!slot.available}
+                                                onClick={() => setTime(slot.time)}
+                                                className={`
+                                                    py-2 px-1 rounded-lg text-sm font-bold border transition-all
+                                                    ${!slot.available
+                                                        ? 'bg-base-200 text-base-content/30 border-transparent cursor-not-allowed decoration-slice'
+                                                        : time === slot.time
+                                                            ? 'bg-primary text-primary-content border-primary shadow-md scale-105'
+                                                            : 'bg-base-100 border-base-300 hover:border-primary hover:text-primary'
+                                                    }
+                                                `}
+                                            >
+                                                {slot.time}
+                                            </button>
+                                        ))}
                                     </div>
-                                </div>
+                                ) : (
+                                    <div className="text-center py-8 text-base-content/50 bg-base-200/50 rounded-xl border border-dashed border-base-300">
+                                        Selecione uma data para ver os horários
+                                    </div>
+                                )}
                             </div>
 
                             {step === 1 && (
@@ -92,8 +127,10 @@ export function CheckoutFlow({ service }: { service: Service }) {
                                         variant="primary"
                                         disabled={!date || !time}
                                         onClick={() => setStep(2)}
+                                        className="gap-2"
                                     >
                                         Continuar
+                                        <CheckCircle size={18} />
                                     </Button>
                                 </div>
                             )}

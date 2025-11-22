@@ -2,8 +2,8 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { Star, MapPin, Clock } from 'lucide-react';
-import { Button, Badge, Typography } from '@/components/ui';
+import { Star, CheckCircle } from 'lucide-react';
+import { Button, Badge } from '@/components/ui';
 import { Service } from '@/mocks/services';
 import { formatCurrency } from '@/lib/helpers';
 
@@ -13,67 +13,70 @@ interface ServiceCardProps {
 
 export function ServiceCard({ service }: ServiceCardProps) {
     return (
-        <div className="card bg-base-100 shadow-xl hover:shadow-2xl transition-all duration-300 border border-base-200 group">
-            <figure className="relative h-48 overflow-hidden">
-                <Image
-                    src={service.image}
-                    alt={service.title}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-                <div className="absolute top-3 right-3">
-                    <Badge variant="secondary" className="shadow-sm">
-                        {service.category}
-                    </Badge>
-                </div>
-            </figure>
+        <Link href={`/servico/${service.id}`} className="group block h-full">
+            <div className="card bg-primary text-primary-content shadow-xl hover:shadow-2xl transition-all duration-300 overflow-hidden h-full border-none rounded-3xl">
+                {/* Image Section */}
+                <figure className="relative h-56 w-full">
+                    <Image
+                        src={service.image}
+                        alt={service.title}
+                        fill
+                        className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-4 right-4">
+                        <Badge className="badge-secondary border-none px-3 py-1 rounded-full font-medium">
+                            {service.category}
+                        </Badge>
+                    </div>
+                </figure>
 
-            <div className="card-body p-5">
-                <div className="flex items-center gap-2 mb-2">
-                    <div className="avatar">
-                        <div className="w-6 h-6 rounded-full relative">
-                            <Image
-                                src={service.provider.avatar}
-                                alt={service.provider.name}
-                                fill
-                                className="object-cover"
-                            />
+                <div className="card-body p-6">
+                    <div className="flex items-center gap-3 mb-3">
+                        <div className="avatar">
+                            <div className="w-8 h-8 rounded-full relative ring-2 ring-primary-content/20">
+                                <Image
+                                    src={service.provider.avatar}
+                                    alt={service.provider.name}
+                                    fill
+                                    className="object-cover"
+                                />
+                            </div>
+                        </div>
+                        <div className="flex items-center gap-1">
+                            <span className="text-sm font-medium opacity-90">{service.provider.name}</span>
+                            {service.provider.verified && (
+                                <CheckCircle size={14} className="text-secondary" />
+                            )}
                         </div>
                     </div>
-                    <Typography variant="caption" size="sm">{service.provider.name}</Typography>
-                    {service.provider.verified && (
-                        <div className="tooltip" data-tip="Verificado">
-                            <span className="text-blue-500 text-xs">✓</span>
-                        </div>
-                    )}
-                </div>
 
-                <Link href={`/servico/${service.id}`} className="hover:text-primary transition-colors">
-                    <h3 className="card-title text-lg mb-2 line-clamp-2">
+                    <h3 className="card-title text-xl font-bold mb-2 group-hover:text-secondary transition-colors line-clamp-2">
                         {service.title}
                     </h3>
-                </Link>
 
-                <div className="flex items-center gap-1 mb-4">
-                    <Star size={16} className="fill-warning text-warning" />
-                    <span className="font-bold">{service.rating}</span>
-                    <Typography variant="caption" size="sm">({service.reviewsCount} avaliações)</Typography>
-                </div>
-
-                <div className="card-actions justify-between items-center mt-auto pt-4 border-t border-base-200">
-                    <div className="flex flex-col">
-                        <Typography variant="caption" size="xs">A partir de</Typography>
-                        <span className="text-xl font-bold text-primary">
-                            {formatCurrency(service.price)}
-                        </span>
+                    <div className="flex items-center gap-1.5 mb-6">
+                        <Star size={18} className="fill-warning text-warning" />
+                        <span className="font-bold text-lg">{service.rating}</span>
+                        <span className="text-sm opacity-60">({service.reviewsCount} avaliações)</span>
                     </div>
-                    <Link href={`/servico/${service.id}`}>
-                        <Button size="sm" variant="primary">
+
+                    {/* Footer (Price & Button) */}
+                    <div className="mt-auto pt-4 border-t border-primary-content/10 flex items-center justify-between">
+                        <div className="flex flex-col">
+                            <span className="text-xs opacity-60">A partir de</span>
+                            <span className="text-2xl font-bold text-secondary">
+                                {formatCurrency(service.price)}
+                            </span>
+                        </div>
+                        <Button
+                            size="sm"
+                            className="btn-secondary border-none font-bold px-4 rounded-xl"
+                        >
                             Ver Detalhes
                         </Button>
-                    </Link>
+                    </div>
                 </div>
             </div>
-        </div>
+        </Link>
     );
 }

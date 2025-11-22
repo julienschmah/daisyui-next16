@@ -17,14 +17,24 @@ export default function LoginPage() {
 
         // Simulate API call
         setTimeout(() => {
-            login({
+            const user = {
                 id: '1',
                 name: 'Usuário Demo',
                 email: 'demo@servicehub.com',
-                role: 'user',
-            });
+                role: 'user' as 'user' | 'admin' | 'provider', // Allow other roles for type checking
+            };
+
+            login(user);
             setIsLoading(false);
-            router.push('/dashboard');
+
+            // Role-based redirection
+            if (user.role === 'admin') {
+                router.push('/admin');
+            } else if (user.role === 'provider') {
+                router.push('/prestador');
+            } else {
+                router.push('/'); // Client goes to public home
+            }
         }, 1000);
     };
 
