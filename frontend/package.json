@@ -19,7 +19,6 @@
     "@nivo/line": "^0.99.0",
     "@nivo/pie": "^0.99.0",
     "@nivo/scatterplot": "^0.99.0",
-    "@prisma/client": "^5.22.0",
     "daisyui": "^5.5.0",
     "lucide-react": "^0.553.0",
     "next": "16.0.1",
@@ -28,6 +27,7 @@
     "react-dom": "19.2.0",
     "react-select": "^5.10.2",
     "recharts": "^3.4.1",
+    "zod": "^4.1.12",
     "zustand": "^5.0.8"
   },
   "devDependencies": {
@@ -38,7 +38,6 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.1",
     "playwright": "^1.56.1",
-    "prisma": "^5.22.0",
     "tailwindcss": "^4",
     "ts-node": "^10.9.2",
     "typescript": "^5"

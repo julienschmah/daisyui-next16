@@ -3,9 +3,43 @@
 import Link from 'next/link';
 import { Button, Input, Card, Typography, Select } from '@/components/ui';
 import { useState } from 'react';
+import { register } from '@/actions/auth';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
+    const router = useRouter();
     const [userType, setUserType] = useState<'client' | 'provider'>('client');
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+    });
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsLoading(true);
+        setError('');
+
+        try {
+            const result = await register({
+                ...formData,
+                role: userType === 'client' ? 'user' : 'provider',
+            });
+
+            if (result.error) {
+                setError(result.error);
+            } else {
+                // User requested redirect to login page after registration
+                router.push('/login');
+            }
+        } catch (err) {
+            setError('Ocorreu um erro inesperado. Tente novamente.');
+        } finally {
+            setIsLoading(false);
+        }
+    };
 
     return (
         <Card className="bg-base-100 shadow-xl">
@@ -29,7 +63,13 @@ export default function RegisterPage() {
                 </a>
             </div>
 
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
+                {error && (
+                    <div className="alert alert-error text-sm py-2">
+                        <span>{error}</span>
+                    </div>
+                )}
+
                 <div className="form-control">
                     <label className="label">
                         <span className="label-text">Nome Completo</span>
@@ -39,6 +79,8 @@ export default function RegisterPage() {
                         placeholder="Seu nome"
                         className="input-bordered w-full"
                         required
+                        value={formData.name}
+                        onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     />
                 </div>
 
@@ -51,6 +93,8 @@ export default function RegisterPage() {
                         placeholder="seu@email.com"
                         className="input-bordered w-full"
                         required
+                        value={formData.email}
+                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     />
                 </div>
 
@@ -63,6 +107,8 @@ export default function RegisterPage() {
                         placeholder="••••••••"
                         className="input-bordered w-full"
                         required
+                        value={formData.password}
+                        onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     />
                 </div>
 
@@ -94,8 +140,14 @@ export default function RegisterPage() {
                     </label>
                 </div>
 
-                <Button type="submit" variant="primary" fullWidth className="mt-2">
-                    Criar Conta
+                <Button
+                    type="submit"
+                    variant="primary"
+                    fullWidth
+                    className="mt-2"
+                    disabled={isLoading}
+                >
+                    {isLoading ? 'Criando conta...' : 'Criar Conta'}
                 </Button>
             </form>
 
