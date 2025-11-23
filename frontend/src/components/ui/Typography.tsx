@@ -1,11 +1,12 @@
 import React from 'react';
 
 interface TypographyProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'body' | 'label' | 'caption' | 'badge' | 'subtitle';
-  size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+  variant?: 'body' | 'label' | 'caption' | 'badge' | 'subtitle' | 'h1' | 'h2' | 'h3' | 'h4';
+  size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
   weight?: 'light' | 'normal' | 'semibold' | 'bold';
   color?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info' | 'base' | 'muted';
   children: React.ReactNode;
+  as?: React.ElementType;
 }
 
 export function Typography({
@@ -14,6 +15,7 @@ export function Typography({
   weight = 'normal',
   color = 'base',
   className = '',
+  as,
   ...props
 }: TypographyProps) {
   const variantClasses = {
@@ -22,6 +24,10 @@ export function Typography({
     caption: 'text-xs text-base-content/70',
     badge: 'text-xs font-bold',
     subtitle: 'text-sm text-base-content/70',
+    h1: 'text-3xl font-bold text-base-content',
+    h2: 'text-2xl font-bold text-base-content',
+    h3: 'text-xl font-bold text-base-content',
+    h4: 'text-lg font-bold text-base-content',
   };
 
   const sizeClasses = {
@@ -30,6 +36,9 @@ export function Typography({
     base: 'text-base',
     lg: 'text-lg',
     xl: 'text-xl',
+    '2xl': 'text-2xl',
+    '3xl': 'text-3xl',
+    '4xl': 'text-4xl',
   };
 
   const weightClasses = {
@@ -52,13 +61,15 @@ export function Typography({
 
   const classes = `
     ${variantClasses[variant]}
-    ${sizeClasses[size]}
-    ${weightClasses[weight]}
-    ${colorClasses[color]}
+    ${size && size !== 'base' ? sizeClasses[size] : ''}
+    ${weight && weight !== 'normal' ? weightClasses[weight] : ''}
+    ${color && color !== 'base' ? colorClasses[color] : ''}
     ${className}
   `.trim();
 
+  const Component = as || (variant.startsWith('h') ? variant : 'span') as React.ElementType;
+
   return (
-    <span className={classes} {...props} />
+    <Component className={classes} {...props} />
   );
 }

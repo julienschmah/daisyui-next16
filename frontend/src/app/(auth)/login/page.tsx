@@ -11,31 +11,42 @@ export default function LoginPage() {
     const login = useUserStore((state) => state.login);
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleLogin = (e: React.FormEvent) => {
+    const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         setIsLoading(true);
 
-        // Simulate API call
-        setTimeout(() => {
-            const user = {
-                id: '1',
-                name: 'Usuário Demo',
-                email: 'demo@servicehub.com',
-                role: 'user' as 'user' | 'admin' | 'provider', // Allow other roles for type checking
-            };
+        const formData = new FormData(e.target as HTMLFormElement);
+        const email = formData.get('email') as string;
+        const password = formData.get('password') as string;
 
-            login(user);
-            setIsLoading(false);
+        try {
+            // Call server action
+            const result = await import('@/actions/auth').then(mod => mod.login({ email, password }));
 
-            // Role-based redirection
-            if (user.role === 'admin') {
-                router.push('/admin');
-            } else if (user.role === 'provider') {
-                router.push('/prestador');
-            } else {
-                router.push('/'); // Client goes to public home
+            if (result.error) {
+                alert(result.error); // Simple alert for now, can be improved
+                setIsLoading(false);
+                return;
             }
-        }, 1000);
+
+            if (result.success && result.user) {
+                // Update client-side store
+                login(result.user);
+
+                // Role-based redirection
+                if (result.user.role === 'admin') {
+                    router.push('/admin');
+                } else if (result.user.role === 'provider') {
+                    router.push('/prestador'); // Assuming this route exists or will exist
+                } else {
+                    router.push('/');
+                }
+            }
+        } catch (error) {
+            console.error('Login failed', error);
+            alert('Erro ao fazer login');
+            setIsLoading(false);
+        }
     };
 
     return (
@@ -51,6 +62,7 @@ export default function LoginPage() {
                         <span className="label-text">Email</span>
                     </label>
                     <Input
+                        name="email"
                         type="email"
                         placeholder="seu@email.com"
                         className="input-bordered w-full"
@@ -63,6 +75,7 @@ export default function LoginPage() {
                         <span className="label-text">Senha</span>
                     </label>
                     <Input
+                        name="password"
                         type="password"
                         placeholder="••••••••"
                         className="input-bordered w-full"

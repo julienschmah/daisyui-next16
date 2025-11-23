@@ -16,6 +16,7 @@ model User {
   avatar    String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  availability Json?   // Stores weekly schedule e.g. { "monday": ["09:00-12:00"] }
 
   // Relations
   services  Service[]
@@ -44,6 +45,7 @@ model Booking {
   id        String   @id @default(cuid())
   date      DateTime
   status    String   @default("pending") // pending, confirmed, completed, cancelled
+  address   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

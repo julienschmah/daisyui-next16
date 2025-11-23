@@ -2,7 +2,7 @@ import prisma from '../utils/db';
 import { Prisma } from '@prisma/client';
 
 export const ServiceService = {
-    async getServices(params: { query?: string; category?: string; maxPrice?: number }) {
+    async getServices(params: { query?: string; category?: string; maxPrice?: number; providerId?: string }) {
         const where: Prisma.ServiceWhereInput = {};
 
         if (params.query) {
@@ -18,6 +18,10 @@ export const ServiceService = {
 
         if (params.maxPrice) {
             where.price = { lte: params.maxPrice };
+        }
+
+        if (params.providerId) {
+            where.providerId = params.providerId;
         }
 
         return prisma.service.findMany({
