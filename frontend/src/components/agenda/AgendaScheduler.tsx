@@ -164,7 +164,7 @@ export default function AgendaScheduler({ userId, initialAvailability, bookings 
         if (!confirm('Tem certeza que deseja cancelar este agendamento?')) return;
 
         try {
-            await fetch(`http://localhost:3001/api/bookings/${selectedBooking.id}/cancel`, { method: 'PATCH' });
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings/${selectedBooking.id}/cancel`, { method: 'PATCH' });
             alert('Agendamento cancelado!');
             setSelectedBooking(null);
             window.location.reload();
@@ -179,7 +179,7 @@ export default function AgendaScheduler({ userId, initialAvailability, bookings 
         if (!newDate) return;
 
         try {
-            await fetch(`http://localhost:3001/api/bookings/${selectedBooking.id}/reschedule`, {
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/bookings/${selectedBooking.id}/reschedule`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ date: newDate })
@@ -195,7 +195,7 @@ export default function AgendaScheduler({ userId, initialAvailability, bookings 
     const handleSaveAvailability = async () => {
         setIsSaving(true);
         try {
-            await fetch(`http://localhost:3001/api/providers/${userId}/availability`, {
+            await fetch(`${process.env.NEXT_PUBLIC_API_URL}/providers/${userId}/availability`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ availability }),
@@ -378,8 +378,8 @@ export default function AgendaScheduler({ userId, initialAvailability, bookings 
                                 </div>
                                 <div className="flex items-center gap-3 text-base-content/80">
                                     <div className={`badge ${selectedBooking.status === 'confirmed' ? 'badge-primary' :
-                                            selectedBooking.status === 'completed' ? 'badge-success' :
-                                                selectedBooking.status === 'cancelled' ? 'badge-error' : 'badge-ghost'
+                                        selectedBooking.status === 'completed' ? 'badge-success' :
+                                            selectedBooking.status === 'cancelled' ? 'badge-error' : 'badge-ghost'
                                         }`}>
                                         {selectedBooking.status === 'confirmed' ? 'Confirmado' :
                                             selectedBooking.status === 'completed' ? 'Concluído' :

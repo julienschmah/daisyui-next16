@@ -2,7 +2,7 @@
 
 import { cookies } from 'next/headers';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
 
 export const fetchProviderBookings = async () => {
     const providerId = (await cookies()).get('userId')?.value;

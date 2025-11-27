@@ -47,7 +47,20 @@ const themes: Theme[] = [
   { name: 'milky', label: 'Milky', category: 'Modern' },
 ];
 
+import { SessionProvider, useSession } from 'next-auth/react';
+import { useUserStore } from '@/store';
+
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <SessionProvider>
+      <AuthSync>{children}</AuthSync>
+    </SessionProvider>
+  );
+}
+
+function AuthSync({ children }: { children: React.ReactNode }) {
+  const { data: session, status } = useSession();
+  const { login, logout } = useUserStore();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -55,6 +68,19 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const savedTheme = localStorage.getItem('theme') || 'light';
     document.documentElement.setAttribute('data-theme', savedTheme);
   }, []);
+
+  useEffect(() => {
+    if (status === 'authenticated' && session?.user) {
+      login({
+        id: session.user.id,
+        name: session.user.name || '',
+        email: session.user.email || '',
+        role: session.user.role as any,
+      });
+    } else if (status === 'unauthenticated') {
+      logout();
+    }
+  }, [session, status, login, logout]);
 
   if (!mounted) return <>{children}</>;
 
@@ -64,17 +90,47 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 export function useTheme() {
   const [theme, setTheme] = useState<string>('light');
   const [mounted, setMounted] = useState(false);
+  const { data: session } = useSession();
 
   useEffect(() => {
     setMounted(true);
     const savedTheme = localStorage.getItem('theme') || 'light';
     setTheme(savedTheme);
+    document.documentElement.setAttribute('data-theme', savedTheme);
   }, []);
 
-  const changeTheme = (newTheme: string) => {
+  // Sync theme from backend when session loads
+  useEffect(() => {
+    if (session?.user?.id) {
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${session.user.id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.theme && data.theme !== theme) {
+            setTheme(data.theme);
+            document.documentElement.setAttribute('data-theme', data.theme);
+            localStorage.setItem('theme', data.theme);
+          }
+        })
+        .catch(err => console.error('Error fetching user theme:', err));
+    }
+  }, [session]);
+
+  const changeTheme = async (newTheme: string) => {
     setTheme(newTheme);
     document.documentElement.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
+
+    if (session?.user?.id) {
+      try {
+        await fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${session.user.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ theme: newTheme }),
+        });
+      } catch (error) {
+        console.error('Error saving theme:', error);
+      }
+    }
   };
 
   return { theme, changeTheme, mounted, themes };

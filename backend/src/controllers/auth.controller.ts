@@ -7,8 +7,9 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'; // Move to .env
 
 export const AuthController = {
     async register(req: Request, res: Response, next: NextFunction) {
+        // Handle registration with new profile fields
         try {
-            const { name, email, password, role } = req.body;
+            const { name, email, password, role, cpf, phone, address, city, state, zipCode } = req.body;
 
             const existingUser = await UserService.getUserByEmail(email);
             if (existingUser) {
@@ -21,6 +22,12 @@ export const AuthController = {
                 email,
                 password: hashedPassword,
                 role: role || 'user',
+                cpf,
+                phone,
+                address,
+                city,
+                state,
+                zipCode
             });
 
             const token = jwt.sign({ userId: user.id, role: user.role }, JWT_SECRET, {

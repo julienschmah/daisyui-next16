@@ -57,4 +57,50 @@ export const ServiceService = {
             },
         });
     },
+
+
+    async create(data: {
+        title: string;
+        description: string;
+        price: number;
+        duration: number;
+        category: string;
+        providerId: string;
+        imageUrl?: string;
+    }) {
+        const { imageUrl, ...rest } = data;
+        return prisma.service.create({
+            data: {
+                ...rest,
+                image: imageUrl || 'https://placehold.co/600x400', // Default image if none provided
+            },
+        });
+    },
+
+    async update(id: string, data: {
+        title?: string;
+        description?: string;
+        price?: number;
+        duration?: number;
+        category?: string;
+        imageUrl?: string;
+    }) {
+        const { imageUrl, ...rest } = data;
+        const updateData: any = { ...rest };
+
+        if (imageUrl !== undefined) {
+            updateData.image = imageUrl;
+        }
+
+        return prisma.service.update({
+            where: { id },
+            data: updateData,
+        });
+    },
+
+    async delete(id: string) {
+        return prisma.service.delete({
+            where: { id },
+        });
+    },
 };

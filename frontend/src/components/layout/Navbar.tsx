@@ -47,9 +47,14 @@ export function Navbar() {
             </div>
             <ul tabIndex={0} className="mt-3 z-[1] p-2 shadow-menu menu menu-sm dropdown-content bg-base-100 rounded-box w-52">
               <li>
+                <Link href="/cliente/pedidos" className="justify-between">
+                  Meus Pedidos
+                  <span className="badge badge-sm badge-primary">Novo</span>
+                </Link>
+              </li>
+              <li>
                 <Link href="/meus-agendamentos" className="justify-between">
                   Meus Agendamentos
-                  <span className="badge badge-sm badge-primary">Novo</span>
                 </Link>
               </li>
               <li><Link href="/historico">Histórico</Link></li>

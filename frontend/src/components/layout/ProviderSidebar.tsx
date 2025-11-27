@@ -8,15 +8,17 @@ import {
     DollarSign,
     Briefcase,
     Settings,
-    LogOut
+    LogOut,
+    MapPin
 } from 'lucide-react';
 import { logout } from '@/actions/auth';
 
 const menuItems = [
     { href: '/prestador', label: 'Visão Geral', icon: LayoutDashboard },
+    { href: '/prestador/mural', label: 'Mural de Oportunidades', icon: MapPin }, // New link
     { href: '/prestador/disponibilidade', label: 'Agenda & Horários', icon: Calendar },
     { href: '/prestador/financeiro', label: 'Financeiro', icon: DollarSign },
-    { href: '/prestador/servicos', label: 'Meus Serviços', icon: Briefcase }, // Moved services to own page
+    { href: '/prestador/servicos', label: 'Meus Serviços', icon: Briefcase },
     { href: '/prestador/configuracoes', label: 'Configurações', icon: Settings },
 ];
 
@@ -40,8 +42,8 @@ export function ProviderSidebar() {
                             key={item.href}
                             href={item.href}
                             className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${isActive
-                                    ? 'bg-primary text-primary-content shadow-md'
-                                    : 'hover:bg-base-300 text-base-content'
+                                ? 'bg-primary text-primary-content shadow-md'
+                                : 'hover:bg-base-300 text-base-content'
                                 }`}
                         >
                             <Icon size={20} />

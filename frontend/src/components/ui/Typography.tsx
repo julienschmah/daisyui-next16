@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface TypographyProps extends React.HTMLAttributes<HTMLSpanElement> {
-  variant?: 'body' | 'label' | 'caption' | 'badge' | 'subtitle' | 'h1' | 'h2' | 'h3' | 'h4';
+  variant?: 'body' | 'body2' | 'label' | 'caption' | 'badge' | 'subtitle' | 'h1' | 'h2' | 'h3' | 'h4';
   size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
   weight?: 'light' | 'normal' | 'semibold' | 'bold';
   color?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info' | 'base' | 'muted';
@@ -20,6 +20,7 @@ export function Typography({
 }: TypographyProps) {
   const variantClasses = {
     body: 'text-base-content',
+    body2: 'text-sm text-base-content/80',
     label: 'text-base-content font-semibold',
     caption: 'text-xs text-base-content/70',
     badge: 'text-xs font-bold',

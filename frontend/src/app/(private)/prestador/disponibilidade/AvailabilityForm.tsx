@@ -13,7 +13,7 @@ const DAYS = [
     { id: 'sunday', label: 'Domingo' },
 ];
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 interface AvailabilityFormProps {
     userId: string;

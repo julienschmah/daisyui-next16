@@ -1,6 +1,6 @@
 'use server';
 
-const API_URL = 'http://localhost:3001/api';
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 export const fetchServices = async (params: { query?: string; category?: string; maxPrice?: number; providerId?: string }) => {
     const searchParams = new URLSearchParams();

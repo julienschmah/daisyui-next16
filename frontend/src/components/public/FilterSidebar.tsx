@@ -2,7 +2,8 @@
 
 import { Input } from '@/components/ui';
 import { Search, Filter } from 'lucide-react';
-import { CATEGORIES } from '@/mocks/services';
+// import { CATEGORIES } from '@/mocks/services'; // Removed mock import
+const CATEGORIES = ['Eletricista', 'Encanador'];
 import { formatCurrency } from '@/lib/helpers';
 
 interface FilterSidebarProps {
